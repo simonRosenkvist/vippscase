@@ -35,4 +35,6 @@ class CheckoutForm extends Component {
 	}
 }
 
+//testar
+
 export default injectStripe(CheckoutForm);
