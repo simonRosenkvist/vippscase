@@ -25,6 +25,7 @@ class CheckoutForm extends React.Component {
             zipCode: "",
             amount: "",
             saveMe: false,
+            stripeError: "",
             idempotency: uuidv4()
         }
     }
@@ -136,7 +137,10 @@ class CheckoutForm extends React.Component {
                 console.log(result)
                 //return result.json()
                 if(result.error){
-                    console.log('fail with: ', result.error.message) // catches the first vailid error message.. ex email then country code and at last any card errors like processing error and funds errors.
+                    console.log('fail with: ', result.error.message) // catches the first vailid error message.. ex email then country code and at last any card errors like processing error and funds errors
+                    parent.setState({
+                        stripeError: result.error.message
+                    })
                 } else {
                     if(result.paymentIntent.status === 'succeeded'){
                         console.log('payment succeded now save the customer and add the order...')
@@ -358,6 +362,7 @@ class CheckoutForm extends React.Component {
                 </div>
             </div>
             <button className="btn btn-primary">Pay</button>
+            <span style={{color:'red'}}>{ this.state.stripeError }</span>
             </form>
             <RandomItems 
                 onAmountChanged={ (amount) => this.handleAmount(amount) }
