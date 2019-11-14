@@ -39,43 +39,51 @@ onSubmitUser = (event) => {
 	Submit to backend happends here'
 	*/
 	let data = {
-		email: "test1@testpw.com",
-		password: "test1"
-		
-		//email: this.state.email,
-		//password: this.state.password
+		email: this.state.email,
+		password: this.state.password,
 	}
 	
 	console.log("email: " + data.email + ". pass: " + data.password);
 
+	//let url = "https://pa-vips-back.herokuapp.com/login";
 	let url = "http://localhost:8080/login";
-	axios.post(url, data)
+	/*axios.post(url, data)
 	.then(res => {
 		console.log(res.cookies)
 		console.log(res)
+        console.log(Cookies.getJSON())
+        console.log('----------------------------')
+        console.log(res.headers['Set-Cookies'])
+    })*/
 
-	})
-	
+    axios.post(url, data)
+        .then((response) => {
+            console.log(response);
+            console.log(Cookies.getJSON());
+            console.log(response.data);
+		})
 }
 	render() {
 		return( 
-			<div>
-				<form>
-					<label>Email: </label>
-					<input type="text" onChange={this.onChangeEmail} placeholder="Email"></input>
+			<div class="row no-gutters">
+                <div class="col-md-3">
+				    <div class="card">
+                        <form class="form-group">
+                            <label htmlFor="loginEmail">Email</label>
+					        <input type="text" class="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
 
-						<br />
+						    <br />
 
-					<label>Password: </label>
-					<input type="password" onChange={this.onChangePassword} placeholder="Password"></input>
+					        <label>Password: </label>
+					        <input type="password" class="form-control" onChange={this.onChangePassword} placeholder="Password"></input>
 
-					<br />
+					        <br />
 
-					<button onClick={this.onSubmitUser} type="button">Log In</button>
+					        <button onClick={this.onSubmitUser} type="button">Log In</button>
 
-				</form>
-				<button onClick={this.sendStuff} type="button">SEND In</button>
-
+				        </form>
+                    </div>
+                </div>
 			</div>
 		)
 	}
