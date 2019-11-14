@@ -59,7 +59,7 @@ onSubmitUser = (event) => {
     axios.post(url, data)
         .then((response) => {
             console.log(response);
-            console.log(Cookies.getJSON());
+            //console.log(Cookies.getJSON());
             console.log(response.data);
 		})
 }

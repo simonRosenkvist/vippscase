@@ -7,6 +7,7 @@ import {
     CardCVCElement,
         } from 'react-stripe-elements';
 import axios from 'axios';
+import RandomItems from './RandomItems'
 
 const uuidv4 = require('uuid/v4');
 class CheckoutForm extends React.Component {
@@ -221,7 +222,7 @@ class CheckoutForm extends React.Component {
         
 
         return(
-            <main className="container">
+<main className="container">
  
             <form className="form-group mt-3 p-3 border rounded shadow-lg pa-form"
                 onSubmit={this.handleSubmit }
@@ -350,7 +351,11 @@ class CheckoutForm extends React.Component {
             </div>
             <button className="btn btn-primary">Pay</button>
             </form>
+            <RandomItems />
+
             </main>
+
+
         );
     }
 }
