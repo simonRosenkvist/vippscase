@@ -28,14 +28,21 @@ class RandomItems extends React.Component {
         })
         .then(() => {
             //Unnesteling the loop and summarizing the total amount.
+            let tempAmount = 0;
             for (let i = 0; i < 4; i++)
             {
                 this.state.finalProd.push(this.state.products[i][0])
-                this.state.amount += this.state.products[i][0][3];
+                tempAmount += this.state.products[i][0][3];
+                
  
             }
             console.log(this.state.finalProd)
-            console.log(this.state.amount)  
+            console.log(this.state.amount)
+            this.setState({
+                amount: (tempAmount*100)
+            })
+            console.log("amount after setState: ", this.state.amount)
+            this.props.onAmountChanged(this.state.amount)
         })
         
          
