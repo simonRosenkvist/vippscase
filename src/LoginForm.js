@@ -1,7 +1,7 @@
 
 import React from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+//import Cookies from 'js-cookie';
 
 
 class LoginForm extends React.Component {
@@ -24,30 +24,39 @@ onChangePassword = (event) => {
 	})
 }
 
+sendStuff = (event) => {
+	axios.get("http://localhost:8080/login")
+	.then(response => {
+		console.log(response.statusText)
+		console.log(response.data.data)
+		//var wtf = document.cookie;
+		//console.log(wtf)
+	})
+}
+
 onSubmitUser = (event) => {
-	console.log("email: " + this.state.email + ". pass: " + this.state.password);
 	/*
 	Submit to backend happends here'
 	*/
 	let data = {
-		email: this.state.email,
-		password: this.state.password
+		email: "test1@testpw.com",
+		password: "test1"
+		
+		//email: this.state.email,
+		//password: this.state.password
 	}
+	
+	console.log("email: " + data.email + ". pass: " + data.password);
 
-	let url = "https://pa-vips-back.herokuapp.com/login";
+	let url = "http://localhost:8080/login";
 	axios.post(url, data)
 	.then(res => {
+		console.log(res.cookies)
 		console.log(res)
-		let kaka = Cookies.getJSON();
-		console.log("----------")
-		console.log(kaka)
-		console.log("**********")
-		console.log(Cookies.get())
-		console.log("_______________")
-		console.log(Cookies.getJSON())
-	})
-}
 
+	})
+	
+}
 	render() {
 		return( 
 			<div>
@@ -65,6 +74,8 @@ onSubmitUser = (event) => {
 					<button onClick={this.onSubmitUser} type="button">Log In</button>
 
 				</form>
+				<button onClick={this.sendStuff} type="button">SEND In</button>
+
 			</div>
 		)
 	}

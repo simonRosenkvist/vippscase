@@ -1,26 +1,25 @@
 
 import React, {Component} from 'react';
-import {Elements, StripeProvider} from 'react-stripe-elements';
-import CheckoutForm from './CheckoutForm.js';
+//import {Elements} from 'react-stripe-elements';
+//import CheckoutForm from './CheckoutForm.js';
 import LoginForm from './LoginForm.js';
 import RegisterForm from './RegisterForm.js';
+import ProductList from './ProductList';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
 
   render() {
     return (
       <div>
-      <RegisterForm />
-      <br/>
+        <RegisterForm />
+        <br/>
         <LoginForm />
-        <StripeProvider apiKey=" pk_test_AtSP8PNrjvdY0irSoVFsaH4P00GrVSyWv8">
-          <div className="example">
-            <h1>React Stripe Elements Example</h1>
-            <Elements>
-              <CheckoutForm />
-            </Elements>
-          </div>
-        </StripeProvider>
+        <br/>
+        <ProductList />
       </div>
     );
   }
