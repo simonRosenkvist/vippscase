@@ -1,7 +1,7 @@
 
 import React from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+//import Cookies from 'js-cookie';
 
 
 class LoginForm extends React.Component {
@@ -24,8 +24,17 @@ onChangePassword = (event) => {
 	})
 }
 
+sendStuff = (event) => {
+	axios.get("http://localhost:8080/login")
+	.then(response => {
+		console.log(response.statusText)
+		console.log(response.data.data)
+		//var wtf = document.cookie;
+		//console.log(wtf)
+	})
+}
+
 onSubmitUser = (event) => {
-	console.log("email: " + this.state.email + ". pass: " + this.state.password);
 	/*
 	Submit to backend happends here'
 	*/
@@ -33,11 +42,14 @@ onSubmitUser = (event) => {
 		email: this.state.email,
 		password: this.state.password,
 	}
+	
+	console.log("email: " + data.email + ". pass: " + data.password);
 
 	//let url = "https://pa-vips-back.herokuapp.com/login";
 	let url = "http://localhost:8080/login";
 	/*axios.post(url, data)
 	.then(res => {
+		console.log(res.cookies)
 		console.log(res)
         console.log(Cookies.getJSON())
         console.log('----------------------------')
@@ -51,7 +63,6 @@ onSubmitUser = (event) => {
             console.log(response.data);
 		})
 }
-
 	render() {
 		return( 
 			<div class="row no-gutters">
