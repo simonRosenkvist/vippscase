@@ -23,11 +23,18 @@ class CheckoutForm extends React.Component {
             statename: "",
             country: "",
             zipCode: "",
-            amount: "1337",
+            amount: "",
             saveMe: false,
             idempotency: uuidv4()
         }
     }
+    
+    handleAmount(amount) {
+        this.setState({
+            amount: amount
+        })
+    }
+
 
     handleSubmit = async (e) => {
         e.preventDefault();
@@ -88,9 +95,10 @@ class CheckoutForm extends React.Component {
                 })
                 
   */        
-            //this shit works....
+            //this shit works.... denna ska användas
             const parent = this;
             let amount = this.state.amount;
+            console.log("simon ammount: " + amount)
             let idempotencyThing = this.state.idempotency;
             let response = await fetch('http://localhost:8080/stripe/intent', {
                 method: 'POST',
@@ -351,7 +359,9 @@ class CheckoutForm extends React.Component {
             </div>
             <button className="btn btn-primary">Pay</button>
             </form>
-            <RandomItems />
+            <RandomItems 
+                onAmountChanged={ (amount) => this.handleAmount(amount) }
+            />
 
             </main>
 
