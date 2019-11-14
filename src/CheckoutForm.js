@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {
     injectStripe,
-    CardElement,
+//    CardElement,
     CardNumberElement,
     CardExpiryElement,
     CardCVCElement,
         } from 'react-stripe-elements';
-import axios from 'axios';
+//import axios from 'axios';
 
 const uuidv4 = require('uuid/v4');
 class CheckoutForm extends React.Component {
