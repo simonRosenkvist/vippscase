@@ -1,7 +1,7 @@
 
 import React from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+//import Cookies from 'js-cookie';
 
 
 class LoginForm extends React.Component {
@@ -25,7 +25,7 @@ onChangePassword = (event) => {
 }
 
 sendStuff = (event) => {
-	axios.get("http://localhost:8080/login")
+	axios.get("https://pa-vips-back.herokuapp.com/login")
 	.then(response => {
 		console.log(response.statusText)
 		console.log(response.data.data)
@@ -46,7 +46,7 @@ onSubmitUser = (event) => {
 	console.log("email: " + data.email + ". pass: " + data.password);
 
 	//let url = "https://pa-vips-back.herokuapp.com/login";
-	let url = "http://localhost:8080/login";
+	let url = "https://pa-vips-back.herokuapp.com/login";
 	/*axios.post(url, data)
 	.then(res => {
 		console.log(res.cookies)

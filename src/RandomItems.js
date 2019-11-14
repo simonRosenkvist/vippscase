@@ -24,7 +24,7 @@ class RandomItems extends React.Component {
     
 
     componentDidMount() {
-        axios.get("http://localhost:8080/randomproducts")
+        axios.get("https://pa-vips-back.herokuapp.com/randomproducts")
         .then(response => response.data)
         .then((data) => {
             //What is even going on in here?
