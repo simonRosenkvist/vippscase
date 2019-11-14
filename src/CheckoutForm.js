@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {
     injectStripe,
-    CardElement,
+//    CardElement,
     CardNumberElement,
     CardExpiryElement,
     CardCVCElement,
         } from 'react-stripe-elements';
-import axios from 'axios';
+//import axios from 'axios';
 import RandomItems from './RandomItems'
 
 const uuidv4 = require('uuid/v4');
