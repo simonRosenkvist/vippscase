@@ -14,7 +14,7 @@ class ProductList extends React.Component {
     
 
 componentDidMount() {
-    axios.get("http://localhost:8080/orders")
+    axios.get("https://pa-vips-back.herokuapp.com/orders")
     .then(response => response.data)
     .then((data) => {
 

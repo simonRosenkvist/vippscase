@@ -101,7 +101,7 @@ class CheckoutForm extends React.Component {
             let amount = this.state.amount;
             console.log("simon ammount: " + amount)
             let idempotencyThing = this.state.idempotency;
-            let response = await fetch('http://localhost:8080/stripe/intent', {
+            await fetch('https://pa-vips-back.herokuapp.com/stripe/intent', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'

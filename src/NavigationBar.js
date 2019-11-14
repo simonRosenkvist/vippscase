@@ -30,7 +30,7 @@ class NavigationBar extends React.Component {
                 <Router>
                     <div>
                         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                            <a className="navbar-brand" href="#">VipsCase</a>
+                            <span className="navbar-brand">VipsCase</span>
                             <button className="navbar-toggler collapsed"
                                     type="button" 
                                     data-toggle="collapse" 
