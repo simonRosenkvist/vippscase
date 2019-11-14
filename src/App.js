@@ -1,19 +1,22 @@
 
 import React, {Component} from 'react';
-import {Elements, StripeProvider} from 'react-stripe-elements';
-import CheckoutForm from './CheckoutForm';
+//import {Elements, StripeProvider} from 'react-stripe-elements';
+//import CheckoutForm from './CheckoutForm.js';
+import LoginForm from './LoginForm.js';
+import RegisterForm from './RegisterForm.js';
+import { StripeProvider, Elements } from 'react-stripe-elements';
+import CheckoutForm from './CheckoutForm.js';
+import NavigationBar from './NavigationBar.js'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 class App extends Component {
+
   render() {
     return (
-      <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
-        <div className="example">
-          <h1>React Stripe Elements Example</h1>
-          <Elements>
-            <CheckoutForm />
-          </Elements>
-        </div>
-      </StripeProvider>
+      <div>
+        <NavigationBar /> 
+      </div>
     );
   }
 }
