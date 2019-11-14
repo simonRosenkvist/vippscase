@@ -32,10 +32,12 @@ class RandomItems extends React.Component {
             {
                 this.state.finalProd.push(this.state.products[i][0])
                 this.state.amount += this.state.products[i][0][3];
+                
  
             }
             console.log(this.state.finalProd)
-            console.log(this.state.amount)  
+            console.log(this.state.amount)
+            this.props.onAmountChanged(this.state.amount)
         })
         
          

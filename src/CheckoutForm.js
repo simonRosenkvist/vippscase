@@ -111,7 +111,7 @@ class CheckoutForm extends React.Component {
                 console.log('response: ', response)
                 return response.json();
             })
-            /*.then(function (responseJson){
+            .then(function (responseJson){
                 let clientSecret = responseJson.client_secret;
                 return parent.props.stripe.handleCardPayment(clientSecret,{
                     payment_method_data: {
@@ -130,7 +130,7 @@ class CheckoutForm extends React.Component {
                     },
                     setup_future_usage: 'on_session'
                 } )
-            })*/
+            })
             .then(function (result) {
                 console.log("result then")
                 console.log(result)
