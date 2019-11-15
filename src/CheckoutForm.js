@@ -15,6 +15,8 @@ class CheckoutForm extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            local: "http://localhost:8080/stripe/intent",
+            live: "https://pa-vips-back.herokuapp.com/stripe/intent",
             name: "",
             email: "",
             phone: "",
@@ -99,9 +101,9 @@ class CheckoutForm extends React.Component {
             //this shit works.... denna ska användas
             const parent = this;
             let amount = this.state.amount;
-            console.log("simon ammount: " + amount)
+            console.log("simon amount: " + amount)
             let idempotencyThing = this.state.idempotency;
-            await fetch('https://pa-vips-back.herokuapp.com/stripe/intent', {
+            await fetch(this.state.local, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
