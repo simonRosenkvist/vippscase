@@ -1,11 +1,12 @@
 
 import React from 'react';
 import axios from 'axios';
-//import Cookies from 'js-cookie';
 
 
 class LoginForm extends React.Component {
 	state = {
+		local: "http://localhost:8080/login",
+		live: "https://pa-vips-back.herokuapp.com/login",
 		email: "",
 		password: ""
 	}
@@ -24,20 +25,17 @@ onChangePassword = (event) => {
 	})
 }
 
-sendStuff = (event) => {
-	axios.get("https://pa-vips-back.herokuapp.com/login")
+/*sendStuff = (event) => {
+	axios.get(this.state.local)
 	.then(response => {
 		console.log(response.statusText)
 		console.log(response.data.data)
-		//var wtf = document.cookie;
-		//console.log(wtf)
+		
 	})
-}
+}*/
 
 onSubmitUser = (event) => {
-	/*
-	Submit to backend happends here'
-	*/
+
 	let data = {
 		email: this.state.email,
 		password: this.state.password,
@@ -45,37 +43,26 @@ onSubmitUser = (event) => {
 	
 	console.log("email: " + data.email + ". pass: " + data.password);
 
-	//let url = "https://pa-vips-back.herokuapp.com/login";
-	let url = "https://pa-vips-back.herokuapp.com/login";
-	/*axios.post(url, data)
-	.then(res => {
-		console.log(res.cookies)
-		console.log(res)
-        console.log(Cookies.getJSON())
-        console.log('----------------------------')
-        console.log(res.headers['Set-Cookies'])
-    })*/
 
-    axios.post(url, data)
+    axios.post(this.state.local, data)
         .then((response) => {
             console.log(response);
-            //console.log(Cookies.getJSON());
             console.log(response.data);
 		})
 }
 	render() {
 		return( 
-			<div class="row no-gutters">
-                <div class="col-md-3">
-				    <div class="card">
-                        <form class="form-group">
+			<div className="row no-gutters">
+                <div className="col-md-3">
+				    <div className="card">
+                        <form className="form-group">
                             <label htmlFor="loginEmail">Email</label>
-					        <input type="text" class="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
+					        <input type="text" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
 
 						    <br />
 
 					        <label>Password: </label>
-					        <input type="password" class="form-control" onChange={this.onChangePassword} placeholder="Password"></input>
+					        <input type="password" className="form-control" onChange={this.onChangePassword} placeholder="Password"></input>
 
 					        <br />
 

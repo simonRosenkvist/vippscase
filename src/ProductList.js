@@ -7,6 +7,8 @@ class ProductList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            local: "http://localhost:8080/orders",
+            live: "https://pa-vips-back.herokuapp.com/orders",
             order: [
             ]
         }
@@ -14,7 +16,7 @@ class ProductList extends React.Component {
     
 
 componentDidMount() {
-    axios.get("https://pa-vips-back.herokuapp.com/orders")
+    axios.get(this.state.local)
     .then(response => response.data)
     .then((data) => {
 
