@@ -1,6 +1,8 @@
 
 import React from 'react';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
+
 
 
 class LoginForm extends React.Component {
@@ -12,16 +14,16 @@ class LoginForm extends React.Component {
 	}
 
 onChangeEmail = (event) => {
-		const email = event.target.value;
+		const val = event.target.value;
 		this.setState({
-			email: email
+			email: val
 		})
 	}
 
 onChangePassword = (event) => {
-	const password = event.target.value;
+	const val = event.target.value;
 	this.setState({
-		password: password
+		password: val
 	})
 }
 
@@ -35,7 +37,7 @@ onChangePassword = (event) => {
 }*/
 
 onSubmitUser = (event) => {
-
+	event.preventDefault();
 	let data = {
 		email: this.state.email,
 		password: this.state.password,
@@ -46,18 +48,22 @@ onSubmitUser = (event) => {
 
     axios.post(this.state.local, data)
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
+			console.log("Response: Should incloude id:22 and sessionid")
+			console.log(response.data)
+			
+
 		})
-}
+	}
+
 	render() {
 		return( 
 			<div className="row no-gutters">
                 <div className="col-md-3">
 				    <div className="card">
-                        <form className="form-group">
-                            <label htmlFor="loginEmail">Email</label>
-					        <input type="text" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
+					<form className="form-group mt-3 p-3 border rounded shadow-lg" 
+							onSubmit={this.onSubmitUser}>
+							<label >Email</label>
+					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
 
 						    <br />
 
@@ -65,8 +71,7 @@ onSubmitUser = (event) => {
 					        <input type="password" className="form-control" onChange={this.onChangePassword} placeholder="Password"></input>
 
 					        <br />
-
-					        <button onClick={this.onSubmitUser} type="button">Log In</button>
+							<button className="btn btn-primary">Log in</button>
 
 				        </form>
                     </div>

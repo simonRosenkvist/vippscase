@@ -23,6 +23,10 @@ class ProductList extends React.Component {
     
 
 componentDidMount() {
+
+    
+    
+
     axios.get(this.state.local)
     .then(response => response.data)
     .then((data) => {

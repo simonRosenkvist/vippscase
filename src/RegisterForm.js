@@ -65,14 +65,7 @@ asd
 		//console.log('sending email: ' + this.state.email + ' and password: ' + this.state.password + ' to server, remember to salt and hash password on server!');
 
 
-		console.log('Name: ' + this.state.name)
-		console.log('Password: ' + this.state.password)
-		console.log('Email: ' + this.state.email)
-		console.log('Lastname: ' + this.state.lastname)
-		console.log('Street: ' + this.state.street)
-		console.log('Postcode: ' + this.state.postcode)
-		console.log('City: ' + this.state.city)
-		console.log('Birthyear: ' + this.state.birthdate)
+		
 		let data = {
 			"name": this.state.name,
 			"password": this.state.password,
@@ -83,8 +76,7 @@ asd
 			"city": this.state.city,
 			"birthdate": this.state.birthdate
 		}
-		console.log(data)
-		console.log("Axios: ")
+		
 		axios.post(this.state.local, data)
 		.then((response) => {
 			console.log(response)
