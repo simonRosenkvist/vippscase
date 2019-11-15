@@ -3,6 +3,8 @@ import React from 'react';
 
 class RegisterForm extends React.Component {
 	state = {
+		local: "http://localhost:8080/register",
+        live: "https://pa-vips-back.herokuapp.com/register",
 		email: "",
 		password: ""
 	}

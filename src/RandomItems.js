@@ -5,13 +5,14 @@ class RandomItems extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            local: "http://localhost:8080/randomproducts",
+            live: "https://pa-vips-back.herokuapp.com/randomproducts",
             products: [],
             finalProd: [],
             amount: 0,
             clothes: [],
             descriptions: [],
-            prices: [],
-            test: []
+            prices: []
         }
         
         
@@ -19,14 +20,13 @@ class RandomItems extends React.Component {
 
     }
 
-    
-    
-    
 
     componentDidMount() {
-        axios.get("https://pa-vips-back.herokuapp.com/randomproducts")
+        console.log(this.state.local)
+        axios.get(this.state.local)
         .then(response => response.data)
         .then((data) => {
+            console.log(data)
             //What is even going on in here?
             data.forEach(element => {
                 this.setState({products:[...this.state.products, element]})
@@ -45,11 +45,14 @@ class RandomItems extends React.Component {
 
  
             }
+            
+        
             console.log(this.state.finalProd)
             console.log(this.state.amount)
             this.setState({
                 amount: (tempAmount*100)
             })
+        
             console.log("amount after setState: ", this.state.amount)
             this.props.onAmountChanged(this.state.amount)
             console.log("------")
