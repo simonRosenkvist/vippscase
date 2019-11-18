@@ -4,6 +4,7 @@ import LoginForm from './LoginForm.js';
 import RegisterForm from './RegisterForm.js';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import CheckoutForm from './CheckoutForm.js';
+import ProductList from './ProductList';
 
 class NavigationBar extends React.Component {
     
@@ -54,6 +55,9 @@ class NavigationBar extends React.Component {
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/checkout">Purchase without login</Link>
                                     </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/history">Order history</Link>
+                                    </li>
                                 </ul>
                             </div>
                         </nav>
@@ -64,6 +68,9 @@ class NavigationBar extends React.Component {
                             </Route>
                             <Route path="/register">
                                 <RegisterForm />
+                            </Route>
+                            <Route path="/history">
+                                <ProductList />
                             </Route>
                             <Route path="/checkout">
                                  <StripeProvider apiKey="pk_test_e8TJTQjsPOOemqjW1YMdF6ok00LFY2p2Ez"> 
