@@ -103,12 +103,13 @@ class CheckoutForm extends React.Component {
             let amount = this.state.amount;
             console.log("simon amount: " + amount)
             let idempotencyThing = this.state.idempotency;
+            let saveCard = this.state.saveMe;
             await fetch(this.state.local, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
                 },
-                body: JSON.stringify({ amount, idempotencyThing })
+                body: JSON.stringify({ amount, idempotencyThing, saveCard })
             })
             .then(function (response) {
                 console.log('response: ', response)
