@@ -1,51 +1,81 @@
 
 import React from 'react';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
+
 
 
 class LoginForm extends React.Component {
 	state = {
+		local: "http://localhost:8080/login",
+		live: "https://pa-vips-back.herokuapp.com/login",
 		email: "",
 		password: ""
 	}
 
 onChangeEmail = (event) => {
-		const email = event.target.value;
+		const val = event.target.value;
 		this.setState({
-			email: email
+			email: val
 		})
 	}
 
 onChangePassword = (event) => {
-	const password = event.target.value;
+	const val = event.target.value;
 	this.setState({
-		password: password
+		password: val
 	})
 }
 
+/*sendStuff = (event) => {
+	axios.get(this.state.local)
+	.then(response => {
+		console.log(response.statusText)
+		console.log(response.data.data)
+		
+	})
+}*/
+
 onSubmitUser = (event) => {
-	console.log("email: " + this.state.email + ". pass: " + this.state.password);
-	/*
-	Submit to backend happends here
-	*/
-}
+	event.preventDefault();
+	let data = {
+		email: this.state.email,
+		password: this.state.password,
+	}
+	
+	console.log("email: " + data.email + ". pass: " + data.password);
+
+
+    axios.post(this.state.local, data)
+        .then((response) => {
+			console.log("Response: Should incloude id:22 and sessionid")
+			console.log(response.data)
+			
+
+		})
+	}
 
 	render() {
 		return( 
-			<div>
-				<form>
-					<label>Email: </label>
-					<input type="text" onChange={this.onChangeEmail} placeholder="Email"></input>
+			<div className="row no-gutters">
+                <div className="col-md-3">
+				    <div className="card">
+					<form className="form-group mt-3 p-3 border rounded shadow-lg" 
+							onSubmit={this.onSubmitUser}>
+							<label >Email</label>
+					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
 
-						<br />
+						    <br />
 
-					<label>Password: </label>
-					<input type="password" onChange={this.onChangePassword} placeholder="Password"></input>
+					        <label>Password: </label>
+					        <input type="password" className="form-control" onChange={this.onChangePassword} placeholder="Password"></input>
 
-					<br />
+					        <br />
+							<button className="btn btn-primary">Log in</button>
 
-					<button onClick={this.onSubmitUser} type="button">Log In</button>
-
-				</form>
+				        </form>
+                    </div>
+                </div>
 			</div>
 		)
 	}
