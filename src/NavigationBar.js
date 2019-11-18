@@ -5,6 +5,7 @@ import RegisterForm from './RegisterForm.js';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import CheckoutForm from './CheckoutForm.js';
 import ProductList from './ProductList';
+import axios from 'axios';
 
 class NavigationBar extends React.Component {
     
@@ -19,6 +20,21 @@ class NavigationBar extends React.Component {
     cartHandler(cart){
         this.setState({
             amount: cart
+        })
+    }
+    readCookie() {
+        console.log("Cookies:")
+        console.log(document.cookie)
+        console.log(document.readCookie)
+
+    }
+
+    logout(){
+        document.cookie = "check = 0"
+        axios.get("http://localhost:8080/logout", ({withCredentials: true}))
+        .then((response) => {
+            console.log(response)
+
         })
     }
 
@@ -57,6 +73,12 @@ class NavigationBar extends React.Component {
                                     </li>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/history">Order history</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/login" onClick={(e)=>{this.logout()}}>Logout</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/home" onClick={(e)=>{this.readCookie()}}>Read Cookies</Link>
                                     </li>
                                 </ul>
                             </div>
