@@ -52,6 +52,11 @@ onSubmitUser = (event) => {
 			console.log(response.data)
 			
 
+			//return response
+
+		})
+		.then((response) =>  {
+			console.log(response)
 		})
 	}
 
@@ -74,7 +79,7 @@ onSubmitUser = (event) => {
 							<button className="btn btn-primary">Log in</button>
 
 				        </form>
-                    </div>
+                    </di
                 </div>
 			</div>
 		)
