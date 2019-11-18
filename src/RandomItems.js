@@ -6,7 +6,7 @@ class RandomItems extends React.Component {
         super(props);
         this.state = {
             local: "http://localhost:8080/randomproducts",
-            live: "https://pa-vips-back.herokuapp.com/randomproducts",
+            live: "http://pa-vips-back.herokuapp.com/randomproducts",
             products: [],
             finalProd: [],
             amount: 0,
@@ -19,8 +19,7 @@ class RandomItems extends React.Component {
 
 
     }
-
-
+    
     componentDidMount() {
         console.log(this.state.local)
         axios.get(this.state.local)
