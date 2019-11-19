@@ -40,7 +40,8 @@ class NavigationBar extends React.Component {
 
     render() {
         
-        if(this.state.isLogedin === 1) {
+        if(this.state.isLogedin === 0) {
+
             
         } else {
             return (
@@ -87,6 +88,7 @@ class NavigationBar extends React.Component {
                         <Switch>
                             <Route path="/login">
                                 <LoginForm />
+                                
                             </Route>
                             <Route path="/register">
                                 <RegisterForm />
