@@ -37,6 +37,7 @@ class CheckoutForm extends React.Component {
             apiResponseCode: 0,
             stripeCustomerId: '',
             userId: 0
+
         }
     }
     
@@ -607,6 +608,7 @@ class CheckoutForm extends React.Component {
                 )
             } else if (this.state.apiResponseCode === 200){
                 return (
+
                     <main className="container">
  
                             <form className="form-group mt-3 p-3 border rounded shadow-lg pa-form"
