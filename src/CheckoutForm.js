@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Redirect } from 'react-router-dom';
 import {
     injectStripe,
 //    CardElement,
@@ -6,7 +7,7 @@ import {
     CardExpiryElement,
     CardCVCElement,
         } from 'react-stripe-elements';
-//import axios from 'axios';
+import axios from 'axios';
 import RandomItems from './RandomItems'
 
 const uuidv4 = require('uuid/v4');
@@ -15,8 +16,10 @@ class CheckoutForm extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            local: "http://localhost:8080/stripe/intent",
-            live: "https://pa-vips-back.herokuapp.com/stripe/intent",
+            stripeLocal: "http://localhost:8080/stripe/intent",
+            stripeLive: "https://pa-vips-back.herokuapp.com/stripe/intent",
+            orderLocal: "http://localhost:8080/order",
+            orderLive: "https://pa-vips-back.herokuapp.com/order",
             name: "",
             email: "",
             phone: "",
@@ -28,16 +31,32 @@ class CheckoutForm extends React.Component {
             amount: "",
             saveMe: false,
             stripeError: "",
+            productIds: [],
+            generatedPasswd: '',
             idempotency: uuidv4()
         }
     }
     
-    handleAmount(amount) {
+    handleAmount(amount, productIds) {
         this.setState({
-            amount: amount
+            amount: amount,
+            productIds: productIds
         })
+        console.log('amount to pay: ' + this.state.amount + '\nproducts in cart: ' + productIds)
     }
 
+    generatePassword(){
+        let length = 8
+        let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+
+        var passwd = ''
+
+        for(let i = 0; i < length; i++){
+            passwd += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        console.log('random pass: ', passwd)
+        return passwd
+    }
 
     handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,6 +66,7 @@ class CheckoutForm extends React.Component {
         // if saveme box is checked (saveMe = true) first create the customer and then do the charge else just charge the card with the details form
         
             console.log('save my card and take my money')
+            //console.log(this.generatePassword())
             try {
                 // first create the payment intent to get the stripe client_secret 
 /*                const parent = this;
@@ -104,7 +124,8 @@ class CheckoutForm extends React.Component {
             console.log("simon amount: " + amount)
             let idempotencyThing = this.state.idempotency;
             let saveCard = this.state.saveMe;
-            await fetch(this.state.local, {
+            // this.state.stripeLive
+            await fetch(this.state.stripeLocal, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -137,8 +158,13 @@ class CheckoutForm extends React.Component {
             })
             .then(function (result) {
                 console.log("result then")
-                console.log(result)
+                console.log('paymnetintent: ', result)
+
+                parent.setState({
+                    generatedPasswd: parent.generatePassword()
+                })
                 //return result.json()
+                //
                 if(result.error){
                     console.log('fail with: ', result.error.message) // catches the first vailid error message.. ex email then country code and at last any card errors like processing error and funds errors
                     parent.setState({
@@ -147,7 +173,78 @@ class CheckoutForm extends React.Component {
                 } else {
                     if(result.paymentIntent.status === 'succeeded'){
                         console.log('payment succeded now save the customer and add the order...')
+                        // webhook will save the customer.
+                        // now create a new user and then place the order and show the order successfull page..
+                        //console.log('reciept? :', result.paymentIntent.data.receipt_url)
 
+                        //console.log(result.paymentIntent);
+                        
+                        
+                       /* let passwd = parent.generatePassword
+                        parent.setState({
+                            generatedPasswd: passwd
+                        })*/
+
+                        let userData = {
+	                        "name": parent.state.name,
+	                        "email": parent.state.email,
+                            "password": parent.state.generatedPasswd,
+	                        "lastname": parent.state.lastname,
+	                        "street": parent.state.address,
+	                        "postcode": parent.state.zipCode,
+	                        "city": parent.state.city,
+                        }
+
+                        console.log('POST user: ', userData)
+                        //console.log('POST order: ', orderData)
+                        axios.post('http://localhost:8080/register/user', userData)
+                        .then((regResponse) => {
+                            console.log(regResponse)
+                            if(regResponse.status === 201){
+                                console.log('user created with id: ', regResponse.data )
+                                let orderData = {
+                                    customer_id: regResponse.data,
+                                    product_id: parent.state.productIds,
+                                    status: 'pending'
+                                }
+                                console.log('orderData: ', orderData)
+                                /*axios.post('http://localhost:8080/order', orderData)
+                                .then((response) => {
+                                    if(response.status === 201){
+                                        console.log('Yayy order created ')
+                                        // now redirect user to success page with the password from before..
+                                    }
+                                })*/
+                            } else {
+                                console.log('Something went horribly wrong.. :\'( ')
+                            }
+                            return regResponse
+                        })
+                        .then((regResponse) => {
+                            console.log('place order for id: ', regResponse.data)
+                            if(regResponse.status === 201){
+
+                                let orderData = {
+                                    customer_id: regResponse.data,
+                                    product_id: parent.state.productIds,
+                                    status: 'pending'
+                                }
+                                console.log('order data igen: ', orderData)
+                                axios.post('http://localhost:8080/order', orderData)
+                                .then((orderResponse) => {
+                                    console.log('order response: ', orderResponse)
+                                    if(orderResponse.status === 201){
+                                        console.log('order successfully placed for user:' + orderData.customer_id + ' with passwd: ' + parent.state.generatedPasswd)
+
+                                        return <Redirect to='/OrderSuccess' />
+                                    }
+                                })
+
+                            } else {
+                                console.log('Something went horribly wrong.. :\'( ')
+                            }
+                        })/*
+                                              
                     }
                 }
             })
@@ -191,7 +288,7 @@ class CheckoutForm extends React.Component {
                 })*/
             } catch (error) {
                 
-            }
+            } // dennna !!!!
 
         // working payment intent
         /*
@@ -287,7 +384,7 @@ class CheckoutForm extends React.Component {
             <div className="form-row">
                 <div className="form-group col-md-2">
                     <label htmlFor="inputZip">Zip</label>
-                    <input type="text"
+                    <input type="integer"
                             className="form-control" 
                             id="inputZip" 
                             value={ this.state.zipCode } 
@@ -368,7 +465,7 @@ class CheckoutForm extends React.Component {
             <span style={{color:'red'}}>{ this.state.stripeError }</span>
             </form>
             <RandomItems 
-                onAmountChanged={ (amount) => this.handleAmount(amount) }
+                onAmountChanged={ (amount, productIds) => this.handleAmount(amount, productIds) }
             />
 
             </main>
