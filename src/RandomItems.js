@@ -22,8 +22,9 @@ class RandomItems extends React.Component {
     }
     
     componentDidMount() {
-        console.log(this.state.local)
-        axios.get(this.state.local)
+        console.log(this.state.live)
+        //axios.get(this.state.local)
+        axios.get(this.props.apiUrl + 'randomproducts')
         .then(response => response.data)
         .then((data) => {
             console.log(data)
