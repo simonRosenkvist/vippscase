@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 
 
+
 class LoginForm extends React.Component {
 	state = {
 		local: "http://localhost:8080/login",
@@ -12,16 +13,16 @@ class LoginForm extends React.Component {
 	}
 
 onChangeEmail = (event) => {
-		const email = event.target.value;
+		const val = event.target.value;
 		this.setState({
-			email: email
+			email: val
 		})
 	}
 
 onChangePassword = (event) => {
-	const password = event.target.value;
+	const val = event.target.value;
 	this.setState({
-		password: password
+		password: val
 	})
 }
 
@@ -35,7 +36,7 @@ onChangePassword = (event) => {
 }*/
 
 onSubmitUser = (event) => {
-
+	event.preventDefault();
 	let data = {
 		email: this.state.email,
 		password: this.state.password,
@@ -43,21 +44,33 @@ onSubmitUser = (event) => {
 	
 	console.log("email: " + data.email + ". pass: " + data.password);
 
+	const httpOptions = {
+		headers: { 
+			'Content-Type': 'application/json',
+			'Access-Control-Allow-Credentials': 'true',
+		},
+		withCredentials: true,
 
-    axios.post(this.state.local, data)
+	  };
+	axios.post(this.state.local, data, httpOptions)
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
+			console.log(document.cookie)
+			
+
+
 		})
-}
+		
+ 	}
+
 	render() {
 		return( 
 			<div className="row no-gutters">
                 <div className="col-md-3">
 				    <div className="card">
-                        <form className="form-group">
-                            <label htmlFor="loginEmail">Email</label>
-					        <input type="text" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
+					<form className="form-group mt-3 p-3 border rounded shadow-lg" 
+							onSubmit={this.onSubmitUser}>
+							<label >Email</label>
+					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
 
 						    <br />
 
@@ -65,8 +78,7 @@ onSubmitUser = (event) => {
 					        <input type="password" className="form-control" onChange={this.onChangePassword} placeholder="Password"></input>
 
 					        <br />
-
-					        <button onClick={this.onSubmitUser} type="button">Log In</button>
+							<button className="btn btn-primary">Log in</button>
 
 				        </form>
                     </div>
