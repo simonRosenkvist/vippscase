@@ -34,7 +34,7 @@ class CheckoutForm extends React.Component {
             productIds: [],
             generatedPasswd: '',
             idempotency: uuidv4(),
-            x: 1
+            x: 0
         }
     }
     
@@ -194,12 +194,14 @@ class CheckoutForm extends React.Component {
         if(this.state.x === 0){
 
             // do axios to check for stripe id in db
-            axios.get('http://localhost:8080/stipecust')
+            axios.get('http://localhost:8080/stripe/customer')
             .then((response) => {
-                if(response.data.includes('cus')){
+                if(response.status === 200 && response.data.includes('cus')){
                     // saved card stuff
+                    console.log('customer: ', response.data)
                 } else {
                     // customer without saved card
+                    console.log('noooo ', response.status)
                     return(
                     <main className="container">
  
