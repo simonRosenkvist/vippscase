@@ -52,9 +52,15 @@ onSubmitUser = (event) => {
 		withCredentials: true,
 
 	  };
-	axios.post(this.state.local, data, httpOptions)
+    let parent = this;
+    axios.post(this.props.apiUrl + 'login', data, httpOptions)
+	//axios.post(this.state.local, data, httpOptions)
         .then((response) => {
 			console.log(document.cookie)
+            if(response.status === 200){
+                //parent.props.onLoggedInChanged(1)
+                parent.props.onLoggedInChange(1)
+            }
 			
 
 

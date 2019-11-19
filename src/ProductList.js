@@ -26,8 +26,8 @@ componentDidMount() {
 
     
     
-
-    axios.get(this.state.local, ({withCredentials: true}))
+    //axios.get(this.state.local, ({withCredentials: true}))
+    axios.get(this.props.apiUrl + 'orders', ({withCredentials: true}))
     .then(response => response.data)
     .then((data) => {
         console.log(data)
