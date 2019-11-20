@@ -26,8 +26,8 @@ componentDidMount() {
 
     
     
-
-    axios.get(this.state.local)
+    //axios.get(this.state.local, ({withCredentials: true}))
+    axios.get(this.props.apiUrl + 'orders', ({withCredentials: true}))
     .then(response => response.data)
     .then((data) => {
         console.log(data)
@@ -65,6 +65,7 @@ componentDidMount() {
                 cartHTML.push(
                 <li className="test5">Product id: {item}</li>
                 )
+                return null
             })
             prettyHTML.push(
                 <div className="test2">
@@ -74,6 +75,8 @@ componentDidMount() {
                     </ul>
                 </div>
             );
+            return null
+
         });
         this.setState({
             dataToDisplay:prettyHTML

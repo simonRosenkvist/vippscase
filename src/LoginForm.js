@@ -1,7 +1,6 @@
 
 import React from 'react';
 import axios from 'axios';
-import Cookies from 'universal-cookie';
 
 
 
@@ -45,15 +44,29 @@ onSubmitUser = (event) => {
 	
 	console.log("email: " + data.email + ". pass: " + data.password);
 
+	const httpOptions = {
+		headers: { 
+			'Content-Type': 'application/json',
+			'Access-Control-Allow-Credentials': 'true',
+		},
+		withCredentials: true,
 
-    axios.post(this.state.local, data)
+	  };
+    let parent = this;
+    axios.post(this.props.apiUrl + 'login', data, httpOptions)
+	//axios.post(this.state.local, data, httpOptions)
         .then((response) => {
-			console.log("Response: Should incloude id:22 and sessionid")
-			console.log(response.data)
+			console.log(document.cookie)
+            if(response.status === 200){
+                //parent.props.onLoggedInChanged(1)
+                parent.props.onLoggedInChange(1)
+            }
 			
 
+
 		})
-	}
+		
+ 	}
 
 	render() {
 		return( 

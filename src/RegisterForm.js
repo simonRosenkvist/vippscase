@@ -1,4 +1,3 @@
-
 import React from 'react';
 import axios from 'axios';
 
@@ -77,7 +76,8 @@ asd
 			"birthdate": this.state.birthdate
 		}
 		
-		axios.post(this.state.local, data)
+		//axios.post(this.state.local, data)
+        axios.post(this.props.apiUrl + 'register/user', data)
 		.then((response) => {
 			console.log(response)
 		})

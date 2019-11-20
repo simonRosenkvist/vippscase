@@ -12,7 +12,8 @@ class RandomItems extends React.Component {
             amount: 0,
             clothes: [],
             descriptions: [],
-            prices: []
+            prices: [],
+            productIds: []
         }
         
         
@@ -21,8 +22,9 @@ class RandomItems extends React.Component {
     }
     
     componentDidMount() {
-        console.log(this.state.local)
-        axios.get(this.state.local)
+        console.log(this.state.live)
+        //axios.get(this.state.local)
+        axios.get(this.props.apiUrl + 'randomproducts')
         .then(response => response.data)
         .then((data) => {
             console.log(data)
@@ -36,11 +38,12 @@ class RandomItems extends React.Component {
             let tempAmount = 0;
             for (let i = 0; i < 4; i++)
             {
+                this.state.productIds.push(this.state.products[i][0][0])
                 this.state.finalProd.push(this.state.products[i][0])
-                tempAmount += this.state.products[i][0][3];
-                this.state.clothes.push(this.state.products[i][0][0])
-                this.state.descriptions.push(this.state.products[i][0][1])
-                this.state.prices.push(this.state.products[i][0][3])
+                tempAmount += this.state.products[i][0][4];
+                this.state.clothes.push(this.state.products[i][0][1])
+                this.state.descriptions.push(this.state.products[i][0][2])
+                this.state.prices.push(this.state.products[i][0][4])
 
  
             }
@@ -49,11 +52,12 @@ class RandomItems extends React.Component {
             console.log(this.state.finalProd)
             console.log(this.state.amount)
             this.setState({
-                amount: (tempAmount*100)
+                amount: (tempAmount*100),
+                productIds: this.state.productIds
             })
         
             console.log("amount after setState: ", this.state.amount)
-            this.props.onAmountChanged(this.state.amount)
+            this.props.onAmountChanged(this.state.amount, this.state.productIds)
             console.log("------")
             console.log(this.state.clothes[0])
             console.log(this.state.descriptions[0])
