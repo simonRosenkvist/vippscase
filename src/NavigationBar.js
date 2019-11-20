@@ -45,7 +45,7 @@ class NavigationBar extends React.Component {
         //axios.get("http://localhost:8080/logout", ({withCredentials: true}))
         axios.get(this.state.apiUrl + 'logout', ({withCredentials: true}))
         .then((response) => {
-            console.log(response)
+            //console.log(response)
             if(response.status === 200){
                 parent.setState({
                     isLoggedin: 0
@@ -54,6 +54,7 @@ class NavigationBar extends React.Component {
         })
     }
 
+    // sets the apiUrl variable before the page is mounted so that the correct url is used.
     UNSAFE_componentWillMount(){
         if(this.state.isLive){
             this.setState({
@@ -62,6 +63,7 @@ class NavigationBar extends React.Component {
         }
     }
 
+    // Checks if a user is loggedin on when the component was mounted
     componentDidMount() {
         /*if(this.state.isLive){
             this.setState({
@@ -73,20 +75,20 @@ class NavigationBar extends React.Component {
         //axios.get(this.state.localApi+'loggedin', ({withCredentials: true}))
         axios.get(this.state.apiUrl + 'loggedin', ({ withCredentials: true }))
         .then((response) => {
-            console.log(parent.state.localApi)
+            //console.log(parent.state.localApi)
             if(response.status === 200){
                 parent.setState({
                     isLogedin: response.data
                 })
-                console.log('isLoggedin: ', parent.state.isLoggedin)
+                //console.log('isLoggedin: ', parent.state.isLoggedin)
             }
-            console.log('response status: ', response.status)
+            //console.log('response status: ', response.status)
         }) 
     }
 
     render() { 
         if(this.state.isLoggedin > 0) {
-            console.log('is now logged in...')
+            //console.log('is now logged in...')
             return (
                 <Router>
                     <div>
