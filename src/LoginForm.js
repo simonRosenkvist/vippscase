@@ -69,6 +69,16 @@ onSubmitUser = (event) => {
  	}
 
 	render() {
+
+		if (this.props.isLoggedin > 0) {
+			return( 
+				<div className="row no-gutters">
+	                <h2>Welcome!</h2>
+	                <p>This is the hipster store of fashinon clothes for all your consumer needs. We take great care to include animal testing, gluten and lactose in all of our products!</p>
+				</div>
+			);
+		}
+
 		return( 
 			<div className="row no-gutters">
                 <div className="col-md-3">

@@ -137,6 +137,13 @@ class NavigationBar extends React.Component {
                                     </Elements>
                                  </StripeProvider>
                             </Route>
+                            <Route path="/login">
+                                <LoginForm 
+                                    onLoggedInChange={ (isLoggedin) => this.changeLogin(isLoggedin) }
+                                    apiUrl = { this.state.apiUrl }
+                                    isLoggedin={this.state.isLoggedin}
+                                />
+                            </Route>
                             <Route path="/">
                             </Route>
                         </Switch>
@@ -183,6 +190,7 @@ class NavigationBar extends React.Component {
                                 <LoginForm 
                                     onLoggedInChange={ (isLoggedin) => this.changeLogin(isLoggedin) }
                                     apiUrl = { this.state.apiUrl }
+                                    isLoggedin={this.state.isLoggedin}
                                 />
                             </Route>
                             <Route path="/register">
