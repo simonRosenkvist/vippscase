@@ -10,6 +10,7 @@ class RandomItems extends React.Component {
             products: [],
             finalProd: [],
             amount: 0,
+            prettyAmount: 0,
             clothes: [],
             descriptions: [],
             prices: [],
@@ -51,13 +52,15 @@ class RandomItems extends React.Component {
         
             //console.log(this.state.finalProd)
             //console.log(this.state.amount)
+            let pAmount = tempAmount
             this.setState({
                 amount: (tempAmount*100),
+                prettyAmount: tempAmount,
                 productIds: this.state.productIds
             })
         
             //console.log("amount after setState: ", this.state.amount)
-            this.props.onAmountChanged(this.state.amount, this.state.productIds)
+            this.props.onAmountChanged(this.state.amount, this.state.prettyAmount, this.state.productIds)
             //console.log("------")
             //console.log(this.state.clothes[0])
             //console.log(this.state.descriptions[0])
