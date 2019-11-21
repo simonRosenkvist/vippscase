@@ -42,7 +42,7 @@ onSubmitUser = (event) => {
 		password: this.state.password,
 	}
 	
-	console.log("email: " + data.email + ". pass: " + data.password);
+	//console.log("email: " + data.email + ". pass: " + data.password);
 
 	const httpOptions = {
 		headers: { 
@@ -56,7 +56,7 @@ onSubmitUser = (event) => {
     axios.post(this.props.apiUrl + 'login', data, httpOptions)
 	//axios.post(this.state.local, data, httpOptions)
         .then((response) => {
-			console.log(document.cookie)
+			//console.log(document.cookie)
             if(response.status === 200){
                 //parent.props.onLoggedInChanged(1)
                 parent.props.onLoggedInChange(1)
@@ -80,9 +80,7 @@ onSubmitUser = (event) => {
 		}
 
 		return( 
-			<div className="row no-gutters">
-                <div className="col-md-3">
-				    <div className="card">
+				    <main className="container-fluid center">
 					<form className="form-group mt-3 p-3 border rounded shadow-lg" 
 							onSubmit={this.onSubmitUser}>
 							<label >Email</label>
@@ -97,9 +95,7 @@ onSubmitUser = (event) => {
 							<button className="btn btn-primary">Log in</button>
 
 				        </form>
-                    </div>
-                </div>
-			</div>
+                    </main>
 		)
 	}
 }
