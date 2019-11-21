@@ -18,7 +18,7 @@ class NavigationBar extends React.Component {
             liveApi: 'https://pa-back-herokuapp.com/',
             localApi: 'http://localhost:8080/',
             apiUrl: 'http://localhost:8080/',
-            isLive: false
+            isLive: true
         }
     }
 
