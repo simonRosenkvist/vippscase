@@ -4,7 +4,8 @@ import LoginForm from './LoginForm.js';
 import RegisterForm from './RegisterForm.js';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import CheckoutForm from './CheckoutForm.js';
-import ProductList from './ProductList';
+import ProductList from './ProductList.js';
+import OrderSuccess from './OrderSuccess.js';
 import axios from 'axios';
 
 class NavigationBar extends React.Component {
@@ -17,7 +18,7 @@ class NavigationBar extends React.Component {
             liveApi: 'https://pa-back-herokuapp.com/',
             localApi: 'http://localhost:8080/',
             apiUrl: 'http://localhost:8080/',
-            isLive: true
+            isLive: false
         }
     }
 
@@ -70,7 +71,7 @@ class NavigationBar extends React.Component {
                 apiUrl: 'https://pa-vips-back.herokuapp.com/'
             })
         }*/
-        console.log('navbar apiUrl: ', this.state.apiUrl)
+        //console.log('navbar apiUrl: ', this.state.apiUrl)
         let parent = this;
         //axios.get(this.state.localApi+'loggedin', ({withCredentials: true}))
         axios.get(this.state.apiUrl + 'loggedin', ({ withCredentials: true }))
@@ -144,6 +145,13 @@ class NavigationBar extends React.Component {
                                     isLoggedin={this.state.isLoggedin}
                                 />
                             </Route>
+                            <Route path="/ordersuccess">
+                                <OrderSuccess
+                                    onLoggedInChange={ (isLoggedin) => this.changeLogin(isLoggedin) }
+                                    apiUrl = { this.state.apiUrl }
+                                    isLoggedin={this.state.isLoggedin}
+                                />
+                            </Route>
                             <Route path="/">
                             </Route>
                         </Switch>
@@ -152,7 +160,7 @@ class NavigationBar extends React.Component {
             )
 
         } else {
-            console.log('is not logged in')
+            //console.log('is not logged in')
             return (
                 <Router>
                     <div>
@@ -207,6 +215,13 @@ class NavigationBar extends React.Component {
                                         /> 
                                     </Elements>
                                  </StripeProvider>
+                            </Route>
+                            <Route path="/ordersuccess">
+                                <OrderSuccess
+                                    onLoggedInChange={ (isLoggedin) => this.changeLogin(isLoggedin) }
+                                    apiUrl = { this.state.apiUrl }
+                                    isLoggedin={this.state.isLoggedin}
+                                />
                             </Route>
                             <Route path="/">
                             </Route>

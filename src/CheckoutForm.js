@@ -36,18 +36,19 @@ class CheckoutForm extends React.Component {
             idempotency: uuidv4(),
             apiResponseCode: 0,
             stripeCustomerId: '',
-            userId: 0
+            userId: 0,
+            rdyToMove: false
 
         }
     }
     
     componentDidMount() {
-        console.log(this.state.live)
+        //console.log(this.state.live)
         let parent = this;
         //axios.get('http://localhost:8080/stripe/customer', ({withCredentials: true}))
         axios.get(this.props.apiUrl + 'stripe/customer', ({ withCredentials: true }))
         .then((response) => {
-            console.log('checkout apiResponseCode on load', parent.state.apiResponseCode)
+            //console.log('checkout apiResponseCode on load', parent.state.apiResponseCode)
             parent.setState({
                     apiResponseCode: response.status,
                     stripeCustomerId: response.data
@@ -66,12 +67,12 @@ class CheckoutForm extends React.Component {
         //axios.get('http://localhost:8080/loggedin', ({withCredentials: true}))
         axios.get(this.props.apiUrl + 'loggedin', ({ withCredentials: true }))
         .then((response)  => {
-            console.log(response)
+            //console.log(response)
             parent.setState({
                 userId: response.data
             })
         })
-        console.log('is logged in nu userid?: ', this.props.isLoggedin)
+        //console.log('is logged in nu userid?: ', this.props.isLoggedin)
     }
     
     handleAmount(amount, productIds) {
@@ -79,7 +80,7 @@ class CheckoutForm extends React.Component {
             amount: amount,
             productIds: productIds
         })
-        console.log('amount to pay: ' + this.state.amount + '\nproducts in cart: ' + productIds)
+        //console.log('amount to pay: ' + this.state.amount + '\nproducts in cart: ' + productIds)
     }
 
     generatePassword(){
@@ -112,7 +113,7 @@ class CheckoutForm extends React.Component {
                     body: JSON.stringify({ amount, idempotencyThing })
                 })
                 .then(function (response) {
-                    console.log('response: ', response)
+                    //console.log('response: ', response)
                     return response.json();
                 })
                 .then(function (responseJson){
@@ -147,7 +148,7 @@ class CheckoutForm extends React.Component {
                     } else {
                         if(result.paymentIntent.status === 'succeeded')
                         {
-                            console.log('payment succeded now add the order...')
+                            //console.log('payment succeded now add the order...')
                             // now create a new user and then place the order and show the order successfull page..
                             let userData = {
 	                            "name": parent.state.name,
@@ -164,7 +165,7 @@ class CheckoutForm extends React.Component {
                             .then((regResponse) => {
                                 console.log(regResponse)
                                 if(regResponse.status === 201){
-                                    console.log('user created with id: ', regResponse.data )
+                                    //console.log('user created with id: ', regResponse.data )
                                     let orderData = {
                                         customer_id: regResponse.data,
                                         product_id: parent.state.productIds,
@@ -176,7 +177,7 @@ class CheckoutForm extends React.Component {
                                 return regResponse
                             })
                             .then((regResponse) => {
-                                console.log('place order for id: ', regResponse.data)
+                                //console.log('place order for id: ', regResponse.data)
                                 if(regResponse.status === 201){
 
                                     let orderData = {
@@ -192,7 +193,10 @@ class CheckoutForm extends React.Component {
                                             console.log('order successfully placed for user:' + orderData.customer_id + ' with passwd: ' + parent.state.generatedPasswd)
                                             console.log('now ready to redirect')
 
-                                            return <Redirect to='/OrderSuccess' />
+                                            //return <Redirect {{ pathname: to='/ordersuccess'}} />
+                                            parent.setState({
+                                                rdyToMove: true
+                                            })
                                         }
                                     })
 
@@ -261,7 +265,7 @@ class CheckoutForm extends React.Component {
                     } else {
                         if(result.paymentIntent.status === 'succeeded')
                         {
-                            console.log('payment succeded now save the customer and add the order...')
+                            //console.log('payment succeded now save the customer and add the order...')
                             // webhook will save the customer.
                             // now create a new user and then place the order and show the order successfull page..
                             
@@ -271,7 +275,7 @@ class CheckoutForm extends React.Component {
                                     product_id: parent.state.productIds,
                                     status: 'pending'
                                 }
-                            console.log('orderData: ', orderData)
+                            //console.log('orderData: ', orderData)
                             //axios.post('http://localhost:8080/order', orderData)
                             axios.post(parent.props.apiUrl + 'order', orderData)
                             .then((response) => {
@@ -279,6 +283,9 @@ class CheckoutForm extends React.Component {
                                 if(response.status === 201){
                                     console.log('order successfully placed for user: ' + orderData.customer_id)
                                     console.log('Now redirect to successpage')
+                                    parent.setState({
+                                        rdyToMove: true
+                                    })
                                 } else {
                                     console.log('something whent wrong while placing order in db')
                                 }
@@ -309,21 +316,22 @@ class CheckoutForm extends React.Component {
                     body: JSON.stringify({ amount, idempotencyThing, stripeCustomer })
                 })
                 .then(function (response) {
-                    console.log('response: ', response)
+                    //console.log('response: ', response)
                     return response.json();
                 })
                 .then(function (responseJson){
                     let clientSecret = responseJson.client_secret;
-                    console.log('json response: ',responseJson.status)
+                    //console.log('json response: ',responseJson.status)
                     if(responseJson.status === 'succeeded'){
-                        console.log('payment successfull now place the order in the database')
+                        console.log(responseJson)
+                        //console.log('payment successfull now place the order in the database')
                         let orderData = {
                             customer_id: parent.state.userId, //regResponse.data hur komma åt vårt customer id Cookie??
                             product_id: parent.state.productIds,
                             status: 'pending'
                             }
 
-                        console.log('orderData: ', orderData)
+                        //console.log('orderData: ', orderData)
                         //axios.post('http://localhost:8080/order', orderData)
                         axios.post(parent.props.apiUrl + 'order', orderData)
                         .then((response) => {
@@ -331,6 +339,9 @@ class CheckoutForm extends React.Component {
                             if(response.status === 201){
                                 console.log('order successfully placed for user: ' + orderData.customer_id)
                                 console.log('Now redirect to successpage')
+                                parent.setState({
+                                    rdyToMove: true
+                                })
                             } else {
                                 console.log('something whent wrong while placing order in db')
                             }
@@ -527,7 +538,7 @@ class CheckoutForm extends React.Component {
                                         if(orderResponse.status === 201){
                                             console.log('order successfully placed for user:' + orderData.customer_id + ' with passwd: ' + parent.state.generatedPasswd)
 
-                                            return <Redirect to='/OrderSuccess' />
+                                            //return <Redirect to='/OrderSuccess' />
                                         }
                                     })
 
@@ -583,16 +594,22 @@ class CheckoutForm extends React.Component {
 
     render() {
 
+        if(this.state.rdyToMove){
+                return <Redirect to={{ pathname: '/ordersuccess'}} />
+        }
         //this.getCustomer()
-        if(this.props.isLoggedin === 1){
-            console.log('props is loggedin: ', this.props.isLoggedin)
-            console.log('checkout response code state: ', this.state.apiResponseCode)
-            console.log('checkout stripeCustomerId state: ', this.state.stripeCustomerId)
+        if(this.props.isLoggedin > 0){
+            //console.log('props is loggedin: ', this.props.isLoggedin)
+            //console.log('checkout response code state: ', this.state.apiResponseCode)
+            //console.log('checkout stripeCustomerId state: ', this.state.stripeCustomerId)
             //let tmp2 = this.getCustomer();
             if(this.state.apiResponseCode === 200 && this.state.stripeCustomerId.includes('cus_')) {
                 return (
 
-                    <main className="container">
+                  <main className="container-fluid container-checkout ">
+                <div className="row">
+ 
+                <div className="col-md-6">
  
                         <form className="form-group mt-3 p-3 border rounded shadow-lg pa-form"
                             onSubmit={ this.handleSavedCardPayment  }
@@ -600,16 +617,22 @@ class CheckoutForm extends React.Component {
                             <button className="btn btn-primary">Pay</button>
                             <span style={{color:'red'}}>{ this.state.stripeError }</span>
                         </form>
-                            <RandomItems 
+                    </div>
+
+                <div className="col-md-4">
+                    <RandomItems 
                                 onAmountChanged={ (amount, productIds) => this.handleAmount(amount, productIds) }
                                 apiUrl = { this.props.apiUrl }
                             />
+                    </div>
+                    </div>
                     </main> 
                 )
             } else if (this.state.apiResponseCode === 200){
                 return (
-
-                    <main className="container">
+                    <main className="container-fluid container-checkout ">
+                        <div className="row">
+                            <div className="col-md-6">
  
                             <form className="form-group mt-3 p-3 border rounded shadow-lg pa-form"
                                 onSubmit={ this.handleLoggedInCustomerPayment }
@@ -740,19 +763,30 @@ class CheckoutForm extends React.Component {
                     <button className="btn btn-primary">Pay</button>
                     <span style={{color:'red'}}>{ this.state.stripeError }</span>
             </form>
+            </div>
+                <div className="col-md-4">
             <RandomItems 
                 onAmountChanged={ (amount, productIds) => this.handleAmount(amount, productIds) }
                 apiUrl = { this.props.apiUrl }
             />
+             </div>
 
+                </div>
             </main>
                 )
             } // else if closes
            
         } else if(this.state.apiResponseCode === 200){ // close if loggedin and do a else
+
+            /*if(this.state.rdyToMove){
+                return <Redirect {{ pathname: to='/ordersuccess'}} />
+            }*/
+
             return(
-                <main className="container">
+                <main className="container-fluid container-checkout ">
+                <div className="row">
  
+                <div className="col-md-6">
                     <form className="form-group mt-3 p-3 border rounded shadow-lg pa-form"
                         onSubmit={ this.handleNewCustomerPayment }
                     >
@@ -869,11 +903,15 @@ class CheckoutForm extends React.Component {
                         <button className="btn btn-primary">Pay</button>
                         <span style={{color:'red'}}>{ this.state.stripeError }</span>
                     </form>
+                </div>
+                <div className="col-md-4">
                     <RandomItems 
                         onAmountChanged={ (amount, productIds) => this.handleAmount(amount, productIds) }
                         apiUrl = { this.props.apiUrl }
                     />
+                </div>
 
+                </div>
                 </main>
             )
         }

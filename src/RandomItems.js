@@ -22,12 +22,12 @@ class RandomItems extends React.Component {
     }
     
     componentDidMount() {
-        console.log(this.state.live)
+        //console.log(this.state.live)
         //axios.get(this.state.local)
         axios.get(this.props.apiUrl + 'randomproducts')
         .then(response => response.data)
         .then((data) => {
-            console.log(data)
+            //console.log(data)
             //What is even going on in here?
             data.forEach(element => {
                 this.setState({products:[...this.state.products, element]})
@@ -49,19 +49,19 @@ class RandomItems extends React.Component {
             }
             
         
-            console.log(this.state.finalProd)
-            console.log(this.state.amount)
+            //console.log(this.state.finalProd)
+            //console.log(this.state.amount)
             this.setState({
                 amount: (tempAmount*100),
                 productIds: this.state.productIds
             })
         
-            console.log("amount after setState: ", this.state.amount)
+            //console.log("amount after setState: ", this.state.amount)
             this.props.onAmountChanged(this.state.amount, this.state.productIds)
-            console.log("------")
-            console.log(this.state.clothes[0])
-            console.log(this.state.descriptions[0])
-            console.log(this.state.prices[0])
+            //console.log("------")
+            //console.log(this.state.clothes[0])
+            //console.log(this.state.descriptions[0])
+            //console.log(this.state.prices[0])
 
         })
         
@@ -70,27 +70,35 @@ class RandomItems extends React.Component {
 
     render() {
         return(
-            <div className="card">
-                <div className="card" >
-                    <p><b>Name:</b> {this.state.clothes[0]}</p>
-                    <p><b>Price:</b> {this.state.prices[0]} SEK</p>
-                    <p><b>Description:</b> {this.state.descriptions[0]}</p>
+            <div>
+            <div className="card pa-card mt-3 border rounded shadow-lg">
+                <div className="card-body" >
+                    <h5 className="card-title">Name: {this.state.clothes[0]}</h5>
+                    <h6 className="card-subtitle mb-2 text-muted">Description: {this.state.descriptions[0]}</h6>
+                    <p className="card-text">Price: {this.state.prices[0]} SEK</p>
                 </div>
-                <div className="card" >
-                    <p><b>Name:</b> {this.state.clothes[1]}</p>
-                    <p><b>Price:</b> {this.state.prices[1]} SEK</p>
-                    <p><b>Description:</b> {this.state.descriptions[1]}</p>                
+            </div>
+            <div className="card pa-card mt-3 border rounded shadow-lg">
+                <div className="card-body" >
+                    <h5 className="card-title"><b>Name:</b> {this.state.clothes[1]}</h5>
+                    <p className="card-text"><b>Description:</b> {this.state.descriptions[1]}</p>                
+                    <h6 className="card-subtitle mb-2 text-muted"><b>Price:</b> {this.state.prices[1]} SEK</h6>
                 </div>
-                <div className="card" >
-                    <p><b>Name:</b> {this.state.clothes[2]}</p>
-                    <p><b>Price:</b> {this.state.prices[2]} SEK</p>
-                    <p><b>Description:</b> {this.state.descriptions[2]}</p>                
+            </div>
+            <div className="card pa-card mt-3 border rounded shadow-lg">
+                <div className="card-body" >
+                    <h5 className="card-title">Name: {this.state.clothes[2]}</h5>
+                    <p className="card-text"><b>Description: </b>{this.state.descriptions[2]}</p>                
+                    <h6 className="card-subtitle mb-2 text-muted"><b>Price:</b> {this.state.prices[2]} SEK</h6>
                 </div>
-                <div className="card" >
+            </div>
+            <div className="card pa-card mt-3 border rounded shadow-lg">
+                <div className="card-body" >
                     <p><b>Name:</b> {this.state.clothes[3]}</p>
-                    <p><b>Price:</b> {this.state.prices[3]} SEK</p>
                     <p><b>Description:</b> {this.state.descriptions[3]}</p>                
+                    <p><b>Price:</b> {this.state.prices[3]} SEK</p>
                 </div>
+            </div>
             </div>
         )   
     }

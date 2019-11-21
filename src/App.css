@@ -23,3 +23,31 @@
 .container {
     width: 33rem;
 }
+.container-checkout {
+    margin: auto;
+    width: 75%;
+}
+.pa-card {
+    margin-bottom: 10px;
+}
+.pa-col {
+    /*width: 33rem;*/
+    margin-left: 20rem;
+}
+.pa-row {
+    margin: 0 auto;
+    float: none;
+    margin-bottom: 10px;
+}
+.center {
+  margin: auto;
+  width: 50%;
+  /*border: 3px solid green;*/
+  /*padding: 10px*/;
+}
+.order-details-container {
+    margin-bottom: 20px;
+}
+.pa-btn {
+    margin-left: 20px;
+}
