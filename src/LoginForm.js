@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -9,7 +10,8 @@ class LoginForm extends React.Component {
 		local: "http://localhost:8080/login",
 		live: "https://pa-vips-back.herokuapp.com/login",
 		email: "",
-		password: ""
+		password: "",
+        rdyToMove: false
 	}
 
 onChangeEmail = (event) => {
@@ -37,7 +39,13 @@ onChangePassword = (event) => {
 
 onSubmitUser = (event) => {
 	event.preventDefault();
-	let data = {
+	
+    /*console.log()
+    this.props.setState({
+        isLoggedin: 1
+    })*/
+
+    let data = {
 		email: this.state.email,
 		password: this.state.password,
 	}
@@ -52,14 +60,24 @@ onSubmitUser = (event) => {
 		withCredentials: true,
 
 	  };
-    let parent = this;
+    const parent = this;
     axios.post(this.props.apiUrl + 'login', data, httpOptions)
 	//axios.post(this.state.local, data, httpOptions)
         .then((response) => {
 			//console.log(document.cookie)
             if(response.status === 200){
-                //parent.props.onLoggedInChanged(1)
-                parent.props.onLoggedInChange(1)
+                //parent.onLoggedInChanged(1)
+  //              parent.props.match.onLoggedInChange(1)
+                console.log('isloggedin: ', parent.props.isLoggedin)
+                //parent.propsisLoggedin = 1
+                /*parent.props.setState({ // dont work
+                    isLoggedin: 1
+                })*/
+                //parent.props.tests()
+                parent.props.onLoggedInChange(1) // funkar med gamla sättet
+                parent.setState({
+                    rdyToMove: true
+                })
             }
 			
 
@@ -69,6 +87,19 @@ onSubmitUser = (event) => {
  	}
 
 	render() {
+
+        if(this.state.rdyToMove){
+            return <Redirect to={{ 
+                                pathname: '/loginsuccess',
+                                state: { 
+                                        isLoggedin: this.props.live, 
+                                        email: this.state.email,
+                                        password: this.state.password
+                                        }
+                                }} 
+                        />
+
+        }
 
 		if (this.props.isLoggedin > 0) {
 			return( 
