@@ -62,12 +62,13 @@ class OrderDetails extends React.Component{
     render () {
         let collapseTarget = '#orderid' + this.props.orderId
         let collapseMe = 'orderid' + this.props.orderId
+        let trId = 'tr' + this.props.orderId
         return (
             <div className="container-fluid order-details-container">
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
-                            <div className="card-header" id={ this.props.orderId }>
+                            <div className="card-header pa-card-header" id={ this.props.orderId }>
                                 <span><h5 className="card-title">Order number: { this.props.orderId }
                                     <button className="btn btn-primary btn-sm pa-btn pull-right" 
                                         type="button" 
@@ -80,9 +81,9 @@ class OrderDetails extends React.Component{
                                 </h5></span>
                             </div>
                             <div className="collapse table-responsive"  id={ collapseMe }>
-                            <table className="card-table table" id="{this.prod.orderId}" aria-expanded="false" aria-controls={this.props.orderId}>
+                            <table className="card-table table" id={this.props.orderId} aria-expanded="false" aria-controls={this.props.orderId}>
                                 <thead>
-                                    <tr>
+                                    <tr id={trId}>
                                         <th scope="col">Product id</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Description</th>
@@ -94,7 +95,9 @@ class OrderDetails extends React.Component{
                                 </tbody>
                             </table>
                             </div>
-                        
+                        <div className="card-footer pa-card-footer text-muted">
+                            <h6 className="card-subtitle md-2 text-muted">Status: {this.props.orderStatus}</h6>
+                        </div> 
                         </div>                    
                     </div>
                 </div>
