@@ -51,7 +51,10 @@ class ProductList extends React.Component {
                 orderId: this.state.order[i][0][0],
                 cart: cart
             });
-            paorder.push({orderId: this.state.order[i][0][0]})
+            paorder.push({
+                orderId: this.state.order[i][0][0],
+                orderStatus: this.state.order[i][0][2]
+            })
         }
         
         //console.log("Final efter 'en rad'")
@@ -59,16 +62,19 @@ class ProductList extends React.Component {
         //console.log('tempData: ', tempData);
         //console.log('orderIds: ', this.state.orderIds)
 
-        var prettyHTML=[]
+        //var prettyHTML=[]
         let paHTML = []
+        console.log("order: ", paorder)
 
         for (const key of paorder) {
             console.log('order id: ', key.orderId)
+            console.log('status: ', key.orderStatus)
             paHTML.push(
-                <div>
+                <div id={ key.orderId}>
                     <OrderDetails
                         apiUrl = { this.props.apiUrl }
                         orderId = { key.orderId }
+                        orderStatus = { key.orderStatus }
                     />
                 </div>
             )
@@ -208,7 +214,6 @@ componentDidMount() {
     console.log('orderIds. lenght: ', this.state.orderIds.length)
     
         //let paHTML= []
-        const parent = this;
         this.state.orderIds.forEach(orders => {
         //console.log('orders.. ', orders.orderId)
         /*axios.get(this.props.apiUrl + 'order/' + orders.orderId, ({withCredentials: true}))
