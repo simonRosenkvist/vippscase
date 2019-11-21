@@ -1,10 +1,7 @@
 import * as React from 'react';
 
 class RegisterSuccess extends React.Component{
-    constructor(props){
-        super(props);
-
-    }
+    
 
     render () {
         

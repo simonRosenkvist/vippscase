@@ -1,6 +1,5 @@
 import React from 'react'
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-import App from './App.js';
 import LoginForm from './LoginForm.js';
 import RegisterForm from './RegisterForm.js';
 import { StripeProvider, Elements } from 'react-stripe-elements';
