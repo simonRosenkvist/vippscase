@@ -26,6 +26,8 @@
 .container-checkout {
     margin: auto;
     width: 75%;
+    min-width: 360px; /* because samsung galaxy S9/S9+ in mozilla dev has that widht :D*/
+
 }
 .pa-card {
     margin-bottom: 10px;
@@ -42,10 +44,13 @@
 .center {
   margin: auto;
   width: 50%;
+  min-width: 360px; /* because samsung galaxy S9/S9+ in mozilla dev has that widht :D*/
   /*border: 3px solid green;*/
   /*padding: 10px*/;
 }
 .order-details-container {
+    width: 75%;
+    min-width: 360px; /* because samsung galaxy S9/S9+ in mozilla dev has that widht :D*/
     margin-bottom: 20px;
 }
 .pa-btn {
