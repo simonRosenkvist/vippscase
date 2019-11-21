@@ -102,7 +102,7 @@ class RegisterForm extends React.Component {
         if(this.state.rdyToMove){
             console.log('ready to redirect: ', this.state.rdyToMove)
             //return <Redirect to = {{ pathname: "/home" }} />;
-            return <Redirect to={{ pathname: '/ordersuccess' }}/>
+            return <Redirect to={{ pathname: '/registersuccess' }}/>
               
         }
 

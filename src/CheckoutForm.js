@@ -254,9 +254,6 @@ class CheckoutForm extends React.Component {
                     }) // The return..
                 })
                 .then(function (result) {
-                    parent.setState({
-                        generatedPasswd: parent.generatePassword()
-                    })
                     if(result.error){
                         console.log('fail with: ', result.error.message) // catches the first vailid error message.. ex email then country code and at last any card errors like processing error and funds errors
                         parent.setState({
@@ -595,7 +592,14 @@ class CheckoutForm extends React.Component {
     render() {
 
         if(this.state.rdyToMove){
-                return <Redirect to={{ pathname: '/ordersuccess'}} 
+                return <Redirect to={{ 
+                                pathname: '/ordersuccess',
+                                state: { 
+                                        isLoggedin: this.props.isLoggedin, 
+                                        email: this.state.email,
+                                        password: this.state.generatePassword
+                                        }
+                                }} 
                         />
         }
         //this.getCustomer()
