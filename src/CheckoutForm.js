@@ -595,7 +595,8 @@ class CheckoutForm extends React.Component {
     render() {
 
         if(this.state.rdyToMove){
-                return <Redirect to={{ pathname: '/ordersuccess'}} />
+                return <Redirect to={{ pathname: '/ordersuccess'}} 
+                        />
         }
         //this.getCustomer()
         if(this.props.isLoggedin > 0){
