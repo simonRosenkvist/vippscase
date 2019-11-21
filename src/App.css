@@ -32,6 +32,9 @@
 .pa-card {
     margin-bottom: 10px;
 }
+.pa-card-header {
+    background-color: rgba(0,0,0,.03);
+}
 .pa-col {
     /*width: 33rem;*/
     margin-left: 20rem;
@@ -55,4 +58,14 @@
 }
 .pa-btn {
     margin-left: 20px;
+}
+.pa-spinner {
+    margin-right: 10px;
+}
+.pa-card-header {
+    padding-bottom: 0.25rem;
+}
+.pa-card-footer {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }

@@ -1,10 +1,7 @@
 import * as React from 'react';
 
 class OrderSuccess extends React.Component{
-    constructor(props){
-        super(props);
-
-    }
+    
 
     componentDidMount(){
         

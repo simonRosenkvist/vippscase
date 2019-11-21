@@ -3,15 +3,14 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-
-
 class LoginForm extends React.Component {
 	state = {
 		local: "http://localhost:8080/login",
 		live: "https://pa-vips-back.herokuapp.com/login",
 		email: "",
 		password: "",
-        rdyToMove: false
+        rdyToMove: false,
+        isPressed: false
 	}
 
 onChangeEmail = (event) => {
@@ -37,8 +36,13 @@ onChangePassword = (event) => {
 	})
 }*/
 
+
 onSubmitUser = (event) => {
 	event.preventDefault();
+    this.setState({
+        isPressed: true
+    })
+    console.log("submit user")
 	
     /*console.log()
     this.props.setState({
@@ -124,7 +128,7 @@ onSubmitUser = (event) => {
 
 					        <br />
 							<button className="btn btn-primary">Log in</button>
-
+                            
 				        </form>
                     </main>
 		)

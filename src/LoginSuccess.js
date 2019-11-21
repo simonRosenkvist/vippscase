@@ -1,10 +1,7 @@
 import * as React from 'react';
 
 class LoginSuccess extends React.Component{
-    constructor(props){
-        super(props);
-
-    }
+    
 
     render () {
         console.log('ordersuccess is loggedin ', this.props.isLoggedin)
