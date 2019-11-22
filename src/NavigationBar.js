@@ -20,7 +20,7 @@ class NavigationBar extends React.Component {
             liveApi: 'https://pa-back-herokuapp.com/',
             localApi: 'http://localhost:8080/',
             apiUrl: 'http://localhost:8080/',
-            isLive: true
+            isLive: false
         }
         this.testL = this.testL.bind(this)
     }

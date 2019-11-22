@@ -9,6 +9,7 @@ class LoginForm extends React.Component {
 		live: "https://pa-vips-back.herokuapp.com/login",
 		email: "",
 		password: "",
+        loginError: "",
         rdyToMove: false,
         isPressed: false
 	}
@@ -69,6 +70,7 @@ onSubmitUser = (event) => {
 	//axios.post(this.state.local, data, httpOptions)
         .then((response) => {
 			//console.log(document.cookie)
+            //console.log('status_ ', response.statusText)
             if(response.status === 200){
                 //parent.onLoggedInChanged(1)
   //              parent.props.match.onLoggedInChange(1)
@@ -83,10 +85,16 @@ onSubmitUser = (event) => {
                     rdyToMove: true
                 })
             }
-			
-
-
 		})
+        .catch((error) => {
+            if (error.response) {
+                if(error.response.status === 401){
+                    parent.setState({
+                        loginError: "email or password not correct."
+                    })
+                }
+            }
+        })
 		
  	}
 
@@ -118,13 +126,14 @@ onSubmitUser = (event) => {
 				    <main className="container-fluid center">
 					<form className="form-group mt-3 p-3 border rounded shadow-lg" 
 							onSubmit={this.onSubmitUser}>
+                            <center>{this.state.loginError}</center>
 							<label >Email</label>
-					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
+					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email" required></input>
 
 						    <br />
 
 					        <label>Password: </label>
-					        <input type="password" className="form-control" onChange={this.onChangePassword} placeholder="Password"></input>
+					        <input type="password" className="form-control" onChange={this.onChangePassword} placeholder="Password" required></input>
 
 					        <br />
 							<button className="btn btn-primary">Log in</button>
