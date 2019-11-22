@@ -1,3 +1,11 @@
+## App rundown
+
+This is a web store app, which intent is to learn how to handle communication in an unstable environment such as internet. </br>
+A user can create an account and login or purchase four randomised products without logging in. Although this will create an account for the user with a randomised password.
+
+A logged in user has the option to see order history, which shows each order with the corresponding order id, as well as that orders details containing the products.
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

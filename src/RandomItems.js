@@ -10,6 +10,7 @@ class RandomItems extends React.Component {
             products: [],
             finalProd: [],
             amount: 0,
+            prettyAmount: 0,
             clothes: [],
             descriptions: [],
             prices: [],
@@ -51,13 +52,15 @@ class RandomItems extends React.Component {
         
             //console.log(this.state.finalProd)
             //console.log(this.state.amount)
+            let pAmount = tempAmount
             this.setState({
                 amount: (tempAmount*100),
+                prettyAmount: tempAmount,
                 productIds: this.state.productIds
             })
         
             //console.log("amount after setState: ", this.state.amount)
-            this.props.onAmountChanged(this.state.amount, this.state.productIds)
+            this.props.onAmountChanged(this.state.amount, this.state.prettyAmount, this.state.productIds)
             //console.log("------")
             //console.log(this.state.clothes[0])
             //console.log(this.state.descriptions[0])
@@ -74,29 +77,29 @@ class RandomItems extends React.Component {
             <div className="card pa-card mt-3 border rounded shadow-lg">
                 <div className="card-body" >
                     <h5 className="card-title">Name: {this.state.clothes[0]}</h5>
-                    <h6 className="card-subtitle mb-2 text-muted">Description: {this.state.descriptions[0]}</h6>
-                    <p className="card-text">Price: {this.state.prices[0]} SEK</p>
+                    <p className="card-text"><b className="card-subtitle mb-2 text-muted">Description: </b>{this.state.descriptions[0]}</p>
+                    <h6 className="card-subtitle mb-2 text-muted"><b>Price: </b>{this.state.prices[0]} SEK</h6>
                 </div>
             </div>
             <div className="card pa-card mt-3 border rounded shadow-lg">
                 <div className="card-body" >
-                    <h5 className="card-title"><b>Name:</b> {this.state.clothes[1]}</h5>
-                    <p className="card-text"><b>Description:</b> {this.state.descriptions[1]}</p>                
+                    <h5 className="card-title">Name: {this.state.clothes[1]}</h5>
+                    <p className="card-text"><b className="card-subtitle mb-2 text-muted">Description:</b> {this.state.descriptions[1]}</p>                
                     <h6 className="card-subtitle mb-2 text-muted"><b>Price:</b> {this.state.prices[1]} SEK</h6>
                 </div>
             </div>
             <div className="card pa-card mt-3 border rounded shadow-lg">
                 <div className="card-body" >
                     <h5 className="card-title">Name: {this.state.clothes[2]}</h5>
-                    <p className="card-text"><b>Description: </b>{this.state.descriptions[2]}</p>                
+                    <p className="card-text"><b className="card-subtitle mb-2 text-muted">Description: </b>{this.state.descriptions[2]}</p>                
                     <h6 className="card-subtitle mb-2 text-muted"><b>Price:</b> {this.state.prices[2]} SEK</h6>
                 </div>
             </div>
             <div className="card pa-card mt-3 border rounded shadow-lg">
                 <div className="card-body" >
-                    <p><b>Name:</b> {this.state.clothes[3]}</p>
-                    <p><b>Description:</b> {this.state.descriptions[3]}</p>                
-                    <p><b>Price:</b> {this.state.prices[3]} SEK</p>
+                    <h5 className="card-title">Name: {this.state.clothes[3]}</h5>
+                    <p className="card-text"><b className="card-subtitle mb-2 text-muted">Description: </b>{this.state.descriptions[3]}</p>                
+                    <h6 className="card-subtitle mb-2 text-muted"><b>Price:</b> {this.state.prices[3]} SEK</h6>
                 </div>
             </div>
             </div>

@@ -1,7 +1,20 @@
 import React from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
-import OrderSuccess from './OrderSuccess'; // för å testa redirect
+
+const ButtonOrder = ({ children, ...rest}) => {
+    return <button className="btn btn-primary"{...rest}>{children}</button>
+}
+
+const ButtonSpinner = () =>(
+    <span className="card-text">
+        <span className="spinner-border spinner-border-sm pa-spinner" 
+            role="status" 
+            aria-hidden="true">
+        </span> 
+           Please wait
+    </span>
+)
 
 class RegisterForm extends React.Component {
 	state = {
@@ -15,10 +28,8 @@ class RegisterForm extends React.Component {
 		postcode: "",
 		city: "",
 		birthdate: "",
-        rdyToMove: false
-	
-			
-
+        rdyToMove: false,
+        doRegister: false
 	}
 		
 		//password: ""
@@ -65,7 +76,9 @@ class RegisterForm extends React.Component {
 	onSubmitForm = (event) => {
 		event.preventDefault();
 		//console.log('sending email: ' + this.state.email + ' and password: ' + this.state.password + ' to server, remember to salt and hash password on server!');
-
+        this.setState({
+            doRegister: true
+        })
 
 		
 		let data = {
@@ -87,7 +100,8 @@ class RegisterForm extends React.Component {
             if(response.status === 201){
                 console.log('user register redirect to login or confirmation page')
                 parent.setState({
-                    rdyToMove: true
+                    rdyToMove: true,
+                    doRegister: false
                 })
             }
 		})
@@ -102,7 +116,7 @@ class RegisterForm extends React.Component {
         if(this.state.rdyToMove){
             console.log('ready to redirect: ', this.state.rdyToMove)
             //return <Redirect to = {{ pathname: "/home" }} />;
-            return <Redirect to={{ pathname: '/ordersuccess' }}/>
+            return <Redirect to={{ pathname: '/registersuccess' }}/>
               
         }
 
@@ -191,8 +205,9 @@ class RegisterForm extends React.Component {
                         />
                     </div>
                 </div>
-               
-				<button className="btn btn-primary">Register</button>
+               <ButtonOrder type="submit" disabled={ this.state.doRegister }>
+                            { this.state.doRegister ? <ButtonSpinner /> : "Register" }
+                </ButtonOrder>
 			</form>
 		</main>
 	);

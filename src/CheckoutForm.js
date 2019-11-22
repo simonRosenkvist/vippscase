@@ -11,6 +11,20 @@ import axios from 'axios';
 import RandomItems from './RandomItems'
 
 const uuidv4 = require('uuid/v4');
+const ButtonOrder = ({ children, ...rest}) => {
+    return <button className="btn btn-primary"{...rest}>{children}</button>
+}
+
+const ButtonSpinner = () =>(
+    <span className="card-text">
+        <span className="spinner-border spinner-border-sm pa-spinner" 
+            role="status" 
+            aria-hidden="true">
+        </span> 
+           Processing
+    </span>
+)
+
 class CheckoutForm extends React.Component {
     
     constructor(props){
@@ -29,6 +43,7 @@ class CheckoutForm extends React.Component {
             country: "",
             zipCode: "",
             amount: "",
+            prettyAmount: "",
             saveMe: false,
             stripeError: "",
             productIds: [],
@@ -37,6 +52,7 @@ class CheckoutForm extends React.Component {
             apiResponseCode: 0,
             stripeCustomerId: '',
             userId: 0,
+            proccessingPayment: false,
             rdyToMove: false
 
         }
@@ -75,9 +91,10 @@ class CheckoutForm extends React.Component {
         //console.log('is logged in nu userid?: ', this.props.isLoggedin)
     }
     
-    handleAmount(amount, productIds) {
+    handleAmount(amount, prettyAmount, productIds) {
         this.setState({
             amount: amount,
+            prettyAmount: prettyAmount,
             productIds: productIds
         })
         //console.log('amount to pay: ' + this.state.amount + '\nproducts in cart: ' + productIds)
@@ -98,12 +115,14 @@ class CheckoutForm extends React.Component {
 
     // Customer that's not loggeding purchase
     handleNewCustomerPayment = async (e) => {
-         e.preventDefault();
+        e.preventDefault();
+        this.setState({
+            proccessingPayment: true
+        })
             try {
                 const parent = this;
                 let amount = this.state.amount;
                 let idempotencyThing = this.state.idempotency;
-                let saveCard = this.state.saveMe;
                 //await fetch(this.state.stripeLocal, {
                 await fetch(this.props.apiUrl + 'stripe/intent', {
                     method: 'POST',
@@ -143,7 +162,8 @@ class CheckoutForm extends React.Component {
                     if(result.error){
                         console.log('fail with: ', result.error.message) // catches the first vailid error message.. ex email then country code and at last any card errors like processing error and funds errors
                         parent.setState({
-                            stripeError: result.error.message
+                            stripeError: result.error.message,
+                            proccessingPayment: false
                         })
                     } else {
                         if(result.paymentIntent.status === 'succeeded')
@@ -166,11 +186,11 @@ class CheckoutForm extends React.Component {
                                 console.log(regResponse)
                                 if(regResponse.status === 201){
                                     //console.log('user created with id: ', regResponse.data )
-                                    let orderData = {
+                                    /*let orderData = { // apparently never used
                                         customer_id: regResponse.data,
                                         product_id: parent.state.productIds,
                                         status: 'pending'
-                                    }
+                                    }*/
                                 } else {
                                     console.log('Something went horribly wrong.. :\'( ')
                                 }
@@ -215,8 +235,11 @@ class CheckoutForm extends React.Component {
 
     // Customer thats loggedin but has not saved a card
     handleLoggedInCustomerPayment = async (e) => {
-         e.preventDefault();
-            try {
+        e.preventDefault();
+        this.setState({
+            proccessingPayment: true
+        })  
+        try {
                 const parent = this;
                 let amount = this.state.amount;
                 let idempotencyThing = this.state.idempotency;
@@ -254,13 +277,11 @@ class CheckoutForm extends React.Component {
                     }) // The return..
                 })
                 .then(function (result) {
-                    parent.setState({
-                        generatedPasswd: parent.generatePassword()
-                    })
                     if(result.error){
                         console.log('fail with: ', result.error.message) // catches the first vailid error message.. ex email then country code and at last any card errors like processing error and funds errors
                         parent.setState({
-                            stripeError: result.error.message
+                            stripeError: result.error.message,
+                            proccessingPayment: false
                         })
                     } else {
                         if(result.paymentIntent.status === 'succeeded')
@@ -300,12 +321,15 @@ class CheckoutForm extends React.Component {
 
     // Customer thats loggedin and has a card saved stripeCustomer
     handleSavedCardPayment = async (e) => {
-         e.preventDefault();
-            try {
+        e.preventDefault();
+        this.setState({
+            proccessingPayment: true
+        })    
+        try {
                 const parent = this;
                 let amount = this.state.amount;
                 let idempotencyThing = this.state.idempotency;
-                let saveCard = this.state.saveMe;
+                //let saveCard = this.state.saveMe;
                 let stripeCustomer = this.state.stripeCustomerId;
                 //await fetch('http://localhost:8080/stripe/savedcustomer', {
                 await fetch(this.props.apiUrl + 'stripe/savedcustomer', {
@@ -320,7 +344,7 @@ class CheckoutForm extends React.Component {
                     return response.json();
                 })
                 .then(function (responseJson){
-                    let clientSecret = responseJson.client_secret;
+                    //let clientSecret = responseJson.client_secret;
                     //console.log('json response: ',responseJson.status)
                     if(responseJson.status === 'succeeded'){
                         console.log(responseJson)
@@ -595,7 +619,15 @@ class CheckoutForm extends React.Component {
     render() {
 
         if(this.state.rdyToMove){
-                return <Redirect to={{ pathname: '/ordersuccess'}} />
+                return <Redirect to={{ 
+                                pathname: '/ordersuccess',
+                                state: { 
+                                        isLoggedin: this.props.isLoggedin, 
+                                        email: this.state.email,
+                                        password: this.state.generatePassword
+                                        }
+                                }} 
+                        />
         }
         //this.getCustomer()
         if(this.props.isLoggedin > 0){
@@ -614,14 +646,17 @@ class CheckoutForm extends React.Component {
                         <form className="form-group mt-3 p-3 border rounded shadow-lg pa-form"
                             onSubmit={ this.handleSavedCardPayment  }
                         >
-                            <button className="btn btn-primary">Pay</button>
+                            <h6 className="class-text">You will be charged: { this.state.prettyAmount } sek</h6>
+                            <ButtonOrder type="submit" disabled={ this.state.proccessingPayment }>
+                                { this.state.proccessingPayment ? <ButtonSpinner /> : "Pay" }
+                            </ButtonOrder>
                             <span style={{color:'red'}}>{ this.state.stripeError }</span>
                         </form>
                     </div>
 
                 <div className="col-md-4">
                     <RandomItems 
-                                onAmountChanged={ (amount, productIds) => this.handleAmount(amount, productIds) }
+                                onAmountChanged={ (amount, prettyAmount, productIds) => this.handleAmount(amount, prettyAmount, productIds) }
                                 apiUrl = { this.props.apiUrl }
                             />
                     </div>
@@ -760,13 +795,16 @@ class CheckoutForm extends React.Component {
                             </label>
                         </div>
                     </div>
-                    <button className="btn btn-primary">Pay</button>
+                    <h6 className="class-text">You will be charged: { this.state.prettyAmount } sek</h6>
+                    <ButtonOrder type="submit" disabled={ this.state.proccessingPayment }>
+                        { this.state.proccessingPayment ? <ButtonSpinner /> : "Pay" }
+                    </ButtonOrder>
                     <span style={{color:'red'}}>{ this.state.stripeError }</span>
             </form>
             </div>
                 <div className="col-md-4">
             <RandomItems 
-                onAmountChanged={ (amount, productIds) => this.handleAmount(amount, productIds) }
+                onAmountChanged={ (amount, prettyAmount, productIds) => this.handleAmount(amount, prettyAmount, productIds) }
                 apiUrl = { this.props.apiUrl }
             />
              </div>
@@ -900,13 +938,16 @@ class CheckoutForm extends React.Component {
                             </div>
                         </div>
            
-                        <button className="btn btn-primary">Pay</button>
+                        <h6 className="class-text">You will be charged: { this.state.prettyAmount } sek</h6>
+                        <ButtonOrder type="submit" disabled={ this.state.proccessingPayment }>
+                                { this.state.proccessingPayment ? <ButtonSpinner /> : "Pay" }
+                        </ButtonOrder>
                         <span style={{color:'red'}}>{ this.state.stripeError }</span>
                     </form>
                 </div>
                 <div className="col-md-4">
                     <RandomItems 
-                        onAmountChanged={ (amount, productIds) => this.handleAmount(amount, productIds) }
+                        onAmountChanged={ (amount, prettyAmount, productIds) => this.handleAmount(amount, prettyAmount, productIds) }
                         apiUrl = { this.props.apiUrl }
                     />
                 </div>
