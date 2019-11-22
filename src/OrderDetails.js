@@ -41,7 +41,7 @@ class OrderDetails extends React.Component{
             <div className="container-fluid order-details-container">
                 <div className="row">
                     <div className="col-md-12">
-                        <div className="card">
+                        <div className="card shadow-lg">
                             <div className="card-header pa-card-header" id={ this.props.orderId }>
                                 <span><h5 className="card-title">Order number: { this.props.orderId }
                                     <button className="btn btn-primary btn-sm pa-btn pull-right" 
