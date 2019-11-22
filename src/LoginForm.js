@@ -90,7 +90,7 @@ onSubmitUser = (event) => {
             if (error.response) {
                 if(error.response.status === 401){
                     parent.setState({
-                        loginError: "email or password not correct."
+                        loginError: "Invalid Email or password"
                     })
                 }
             }
@@ -126,7 +126,6 @@ onSubmitUser = (event) => {
 				    <main className="container-fluid center">
 					<form className="form-group mt-3 p-3 border rounded shadow-lg" 
 							onSubmit={this.onSubmitUser}>
-                            <center>{this.state.loginError}</center>
 							<label >Email</label>
 					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email" required></input>
 
@@ -136,8 +135,10 @@ onSubmitUser = (event) => {
 					        <input type="password" className="form-control" onChange={this.onChangePassword} placeholder="Password" required></input>
 
 					        <br />
-							<button className="btn btn-primary">Log in</button>
-                            
+
+							<button className="btn btn-primary">Log in</button><center>{this.state.loginError}</center>
+							
+
 				        </form>
                     </main>
 		)
