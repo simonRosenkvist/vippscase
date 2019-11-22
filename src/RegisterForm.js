@@ -18,8 +18,6 @@ const ButtonSpinner = () =>(
 
 class RegisterForm extends React.Component {
 	state = {
-		local: "http://localhost:8080/register/user",
-		live: "https://pa-vips-back.herokuapp.com/register/user",
 		name: "",
 		password: "",
 		email: "",
@@ -32,7 +30,6 @@ class RegisterForm extends React.Component {
         doRegister: false
 	}
 		
-		//password: ""
 	
 	onChangeName = (event) => {
 		let val = event.target.value;
@@ -44,7 +41,7 @@ class RegisterForm extends React.Component {
 		let val = event.target.value;
 		this.setState({ password: val });
 	}
-//asd
+
 	onChangeEmail = (event) => {
 		let val = event.target.value;
 		this.setState({ email: val });
@@ -75,7 +72,6 @@ class RegisterForm extends React.Component {
 
 	onSubmitForm = (event) => {
 		event.preventDefault();
-		//console.log('sending email: ' + this.state.email + ' and password: ' + this.state.password + ' to server, remember to salt and hash password on server!');
         this.setState({
             doRegister: true
         })
@@ -92,11 +88,9 @@ class RegisterForm extends React.Component {
 			"birthdate": this.state.birthdate
 		}
 		
-		//axios.post(this.state.local, data)
         const parent = this
         axios.post(this.props.apiUrl + 'register/user', data)
 		.then((response) => {
-			//console.log(response)
             if(response.status === 201){
                 console.log('user register redirect to login or confirmation page')
                 parent.setState({
@@ -111,11 +105,7 @@ class RegisterForm extends React.Component {
 	}
 
 	render() {
-		//name, password, email, lastname, street, postcode, city, birthdate dd/mm/yyyy
-        console.log('move? ',this.state.rdyToMove)
         if(this.state.rdyToMove){
-            console.log('ready to redirect: ', this.state.rdyToMove)
-            //return <Redirect to = {{ pathname: "/home" }} />;
             return <Redirect to={{ pathname: '/registersuccess' }}/>
               
         }
@@ -132,6 +122,7 @@ class RegisterForm extends React.Component {
                             id="input"
                             className="form-control"
                             onChange={this.onChangeName} 
+                            required
                         />
                     </div>
                     <div className="form-group col-md-6">
@@ -141,6 +132,7 @@ class RegisterForm extends React.Component {
                             id="inputLastname"
                             className="form-control"
                             onChange={this.onChangeLastName} 
+                            required
                         />
                     </div>
                 </div>
@@ -152,6 +144,7 @@ class RegisterForm extends React.Component {
                             id="inputMail"
                             className="form-control"
                             onChange={this.onChangeEmail} 
+                            required
                     />  
                     </div>
                     <div className="form-group col-md-6">
@@ -161,6 +154,7 @@ class RegisterForm extends React.Component {
                             id="inputPassword"
                             className="form-control"
                             onChange={this.onChangePassword} 
+                            required
                         />
                     </div>
                 </div>
@@ -173,6 +167,7 @@ class RegisterForm extends React.Component {
                             id="inputBirth"
                             className="form-control"
                             onChange={this.onChangeBirthyear} 
+                            required
                         />
                     </div>
                 </div>
@@ -183,6 +178,7 @@ class RegisterForm extends React.Component {
                         id="inputStreet"
                         className="form-control"
                         onChange={this.onChangeStreetName} 
+                        required
                     />
                 </div>
                 <div className="form-row">
@@ -193,6 +189,7 @@ class RegisterForm extends React.Component {
                             id="inputZip"
                             className="form-control"
                             onChange={this.onChangePostcode} 
+                            required
                         />
                     </div>
 				    <div className="form-group col-md-6">
@@ -201,7 +198,8 @@ class RegisterForm extends React.Component {
                             placeholder="City" 
                             id="inputCity"
                             className="form-control"
-                            onChange={this.onChangeCity} 
+                            onChange={this.onChangeCity}
+                            required
                         />
                     </div>
                 </div>
