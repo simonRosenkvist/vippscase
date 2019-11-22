@@ -4,7 +4,10 @@ import LoginForm from './LoginForm.js';
 import RegisterForm from './RegisterForm.js';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import CheckoutForm from './CheckoutForm.js';
-import ProductList from './ProductList';
+import ProductList from './ProductList.js';
+import OrderSuccess from './OrderSuccess.js';
+import LoginSuccess from './LoginSuccess.js';
+import RegisterSuccess from './RegisterSuccess.js';
 import axios from 'axios';
 
 class NavigationBar extends React.Component {
@@ -14,11 +17,10 @@ class NavigationBar extends React.Component {
         this.state = {
             amount: '',
             isLoggedin: 0,
-            liveApi: 'https://pa-back-herokuapp.com/',
-            localApi: 'http://localhost:8080/',
             apiUrl: 'http://localhost:8080/',
-            isLive: true
+            isLive: false
         }
+        this.testL = this.testL.bind(this)
     }
 
     cartHandler(cart){
@@ -39,10 +41,15 @@ class NavigationBar extends React.Component {
         })
     }
 
+    testL(){
+        this.setState({
+            isLoggedin: 1
+        })
+    }
+
     logout(){
         let parent = this;
         document.cookie = "check = 0"
-        //axios.get("http://localhost:8080/logout", ({withCredentials: true}))
         axios.get(this.state.apiUrl + 'logout', ({withCredentials: true}))
         .then((response) => {
             //console.log(response)
@@ -65,30 +72,21 @@ class NavigationBar extends React.Component {
 
     // Checks if a user is loggedin on when the component was mounted
     componentDidMount() {
-        /*if(this.state.isLive){
-            this.setState({
-                apiUrl: 'https://pa-vips-back.herokuapp.com/'
-            })
-        }*/
-        console.log('navbar apiUrl: ', this.state.apiUrl)
         let parent = this;
-        //axios.get(this.state.localApi+'loggedin', ({withCredentials: true}))
         axios.get(this.state.apiUrl + 'loggedin', ({ withCredentials: true }))
         .then((response) => {
-            //console.log(parent.state.localApi)
             if(response.status === 200){
                 parent.setState({
-                    isLogedin: response.data
+                    isLoggedin: response.data
                 })
-                //console.log('isLoggedin: ', parent.state.isLoggedin)
             }
-            //console.log('response status: ', response.status)
         }) 
     }
 
-    render() { 
+    
+
+    render() {
         if(this.state.isLoggedin > 0) {
-            //console.log('is now logged in...')
             return (
                 <Router>
                     <div>
@@ -144,6 +142,17 @@ class NavigationBar extends React.Component {
                                     isLoggedin={this.state.isLoggedin}
                                 />
                             </Route>
+                            <Route path="/ordersuccess">
+                                <OrderSuccess
+                                    apiUrl = { this.state.apiUrl }
+                                />
+                            </Route>
+                             <Route path="/loginsuccess">
+                                <LoginSuccess
+                                    apiUrl = { this.state.apiUrl }
+                                    isLoggedin={this.state.isLoggedin}
+                                />
+                            </Route>
                             <Route path="/">
                             </Route>
                         </Switch>
@@ -192,7 +201,10 @@ class NavigationBar extends React.Component {
                                     apiUrl = { this.state.apiUrl }
                                     isLoggedin={this.state.isLoggedin}
                                 />
+
                             </Route>
+ 
+
                             <Route path="/register">
                                 <RegisterForm 
                                     apiUrl = { this.state.apiUrl }
@@ -208,6 +220,20 @@ class NavigationBar extends React.Component {
                                     </Elements>
                                  </StripeProvider>
                             </Route>
+                            <Route path="/registersuccess">
+                                <RegisterSuccess
+                                    apiUrl = { this.state.apiUrl }
+                                    isLoggedin={this.state.isLoggedin}
+                                />
+                            </Route>
+                           
+                            <Route path="/ordersuccess" component={OrderSuccess}>
+                                <OrderSuccess
+                                    apiUrl = { this.state.apiUrl }
+                                    isLoggedin={this.state.isLoggedin}
+                                />
+                            </Route>
+                            
                             <Route path="/">
                             </Route>
                         </Switch>

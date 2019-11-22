@@ -1,15 +1,17 @@
 
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
-
-
 
 class LoginForm extends React.Component {
 	state = {
 		local: "http://localhost:8080/login",
 		live: "https://pa-vips-back.herokuapp.com/login",
 		email: "",
-		password: ""
+		password: "",
+        loginError: "",
+        rdyToMove: false,
+        isPressed: false
 	}
 
 onChangeEmail = (event) => {
@@ -26,23 +28,19 @@ onChangePassword = (event) => {
 	})
 }
 
-/*sendStuff = (event) => {
-	axios.get(this.state.local)
-	.then(response => {
-		console.log(response.statusText)
-		console.log(response.data.data)
-		
-	})
-}*/
 
 onSubmitUser = (event) => {
 	event.preventDefault();
-	let data = {
+    this.setState({
+        isPressed: true
+    })
+    console.log("submit user")
+	
+    let data = {
 		email: this.state.email,
 		password: this.state.password,
 	}
 	
-	console.log("email: " + data.email + ". pass: " + data.password);
 
 	const httpOptions = {
 		headers: { 
@@ -52,55 +50,67 @@ onSubmitUser = (event) => {
 		withCredentials: true,
 
 	  };
-    let parent = this;
+    const parent = this;
     axios.post(this.props.apiUrl + 'login', data, httpOptions)
-	//axios.post(this.state.local, data, httpOptions)
-        .then((response) => {
-			console.log(document.cookie)
-            if(response.status === 200){
-                //parent.props.onLoggedInChanged(1)
-                parent.props.onLoggedInChange(1)
+    .then((response) => {
+         if(response.status === 200){
+             parent.props.onLoggedInChange(1) 
+             parent.setState({
+                 rdyToMove: true
+                })
             }
-			
-
-
 		})
+        .catch((error) => {
+            if (error.response) {
+                if(error.response.status === 401){
+                    parent.setState({
+                        loginError: "Invalid Email or password"
+                    })
+                }
+            }
+        })
 		
  	}
 
 	render() {
 
-		if (this.props.isLoggedin > 0) {
-			return( 
-				<div className="row no-gutters">
-	                <h2>Welcome!</h2>
-	                <p>This is the hipster store of fashinon clothes for all your consumer needs. We take great care to include animal testing, gluten and lactose in all of our products!</p>
-				</div>
-			);
-		}
+        if(this.state.rdyToMove){
+            return <Redirect to={{ 
+                                pathname: '/loginsuccess',
+                                state: { 
+                                        isLoggedin: this.props.live, 
+                                        email: this.state.email,
+                                        password: this.state.password
+                                        }
+                                }} 
+                        />
 
-		return( 
-			<div className="row no-gutters">
-                <div className="col-md-3">
-				    <div className="card">
+        }
+
+		if (this.props.isLoggedin === 0) {
+		    return( 
+				    <main className="container-fluid center">
 					<form className="form-group mt-3 p-3 border rounded shadow-lg" 
 							onSubmit={this.onSubmitUser}>
 							<label >Email</label>
-					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email"></input>
+					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email" required></input>
 
 						    <br />
 
 					        <label>Password: </label>
-					        <input type="password" className="form-control" onChange={this.onChangePassword} placeholder="Password"></input>
+					        <input type="password" className="form-control" onChange={this.onChangePassword} placeholder="Password" required></input>
 
 					        <br />
-							<button className="btn btn-primary">Log in</button>
+
+							<button className="btn btn-primary">Log in</button><center>{this.state.loginError}</center>
+							
 
 				        </form>
-                    </div>
-                </div>
-			</div>
-		)
+                    </main>
+		        )
+        } else {
+            return(<div></div>)
+        }
 	}
 }
 
