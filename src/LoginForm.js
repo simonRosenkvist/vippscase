@@ -28,15 +28,6 @@ onChangePassword = (event) => {
 	})
 }
 
-/*sendStuff = (event) => {
-	axios.get(this.state.local)
-	.then(response => {
-		console.log(response.statusText)
-		console.log(response.data.data)
-		
-	})
-}*/
-
 
 onSubmitUser = (event) => {
 	event.preventDefault();
@@ -45,17 +36,11 @@ onSubmitUser = (event) => {
     })
     console.log("submit user")
 	
-    /*console.log()
-    this.props.setState({
-        isLoggedin: 1
-    })*/
-
     let data = {
 		email: this.state.email,
 		password: this.state.password,
 	}
 	
-	//console.log("email: " + data.email + ". pass: " + data.password);
 
 	const httpOptions = {
 		headers: { 
@@ -67,22 +52,11 @@ onSubmitUser = (event) => {
 	  };
     const parent = this;
     axios.post(this.props.apiUrl + 'login', data, httpOptions)
-	//axios.post(this.state.local, data, httpOptions)
-        .then((response) => {
-			//console.log(document.cookie)
-            //console.log('status_ ', response.statusText)
-            if(response.status === 200){
-                //parent.onLoggedInChanged(1)
-  //              parent.props.match.onLoggedInChange(1)
-                console.log('isloggedin: ', parent.props.isLoggedin)
-                //parent.propsisLoggedin = 1
-                /*parent.props.setState({ // dont work
-                    isLoggedin: 1
-                })*/
-                //parent.props.tests()
-                parent.props.onLoggedInChange(1) // funkar med gamla sättet
-                parent.setState({
-                    rdyToMove: true
+    .then((response) => {
+         if(response.status === 200){
+             parent.props.onLoggedInChange(1) 
+             parent.setState({
+                 rdyToMove: true
                 })
             }
 		})
@@ -113,16 +87,8 @@ onSubmitUser = (event) => {
 
         }
 
-		if (this.props.isLoggedin > 0) {
-			return( 
-				<div className="row no-gutters">
-	                <h2>Welcome!</h2>
-	                <p>This is the hipster store of fashinon clothes for all your consumer needs. We take great care to include animal testing, gluten and lactose in all of our products!</p>
-				</div>
-			);
-		}
-
-		return( 
+		if (this.props.isLoggedin === 0) {
+		    return( 
 				    <main className="container-fluid center">
 					<form className="form-group mt-3 p-3 border rounded shadow-lg" 
 							onSubmit={this.onSubmitUser}>
@@ -141,7 +107,10 @@ onSubmitUser = (event) => {
 
 				        </form>
                     </main>
-		)
+		        )
+        } else {
+            return(<div></div>)
+        }
 	}
 }
 

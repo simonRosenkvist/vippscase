@@ -11,24 +11,12 @@ class OrderDetails extends React.Component{
     }
 
     componentDidMount(){
-        console.log('order_details ', this.props.orderId)
         const parent = this
         let paHTML = []
         axios.get(this.props.apiUrl + 'order/' + this.props.orderId, ({ withCredentials: true }) )
             .then((response) => {
-                console.log('axios then')
                  response.data.forEach(element => {
-                    //console.log('foreach: ', element)
-                    /*paHTML.push(
-                        <ul className="test4" key={ this.props.orderId }>
-                                <li className="test6" key={element.id}>Product id: {element.id}</li>
-                                <li className="test6" key={element.productname}>Name: {element.productname}</li>
-                                <li className="test6" key={element.productdescription}>Description: {element.productdescription}</li>
-                                <li className="test6" key={element.price}>Price: {element.price}</li>
-                        </ul>
-                    )*/
-
-                     paHTML.push(
+                    paHTML.push(
                          <tr>
                          <td className="card-text">{ element.id }</td>
                          <td className="card-text">{ element.productname}</td>
@@ -36,28 +24,14 @@ class OrderDetails extends React.Component{
                          <td className="card-text">{ element.price }</td>
                          </tr>
                      )
-            
                 });
             })
             .then(()=>{
-                console.log('pahtml size: ', paHTML.length)
                 parent.setState({
                     dataToDisplay: paHTML
                 })
-                console.log('data to display size ', parent.state.dataToDisplay.length)
             })
-
     }
-/*
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-    Button with data-target
-  </button>
-</p>
-<div class="collapse" id="collapseExample">
-  <div class="card card-body">
-    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-  </div>
-</div>*/
 
     render () {
         let collapseTarget = '#orderid' + this.props.orderId
@@ -103,14 +77,6 @@ class OrderDetails extends React.Component{
                 </div>
             </div>
         )
-        
-        /*return (
-            <div className="test2">
-                <h3 className="test3">Order id: { this.props.orderId }</h3>
-                    { this.state.dataToDisplay }
-            </div>
-
-        )*/
     }
 
 } export default OrderDetails;
