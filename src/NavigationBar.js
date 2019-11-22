@@ -18,7 +18,7 @@ class NavigationBar extends React.Component {
             amount: '',
             isLoggedin: 0,
             apiUrl: 'http://localhost:8080/',
-            isLive: false
+            isLive: true
         }
         this.testL = this.testL.bind(this)
     }
