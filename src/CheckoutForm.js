@@ -42,6 +42,7 @@ class CheckoutForm extends React.Component {
             statename: "",
             country: "",
             zipCode: "",
+            zipError: "",
             amount: "",
             prettyAmount: "",
             saveMe: false,
@@ -224,6 +225,17 @@ class CheckoutForm extends React.Component {
                                     console.log('Something went horribly wrong.. :\'( ')
                                 }
                             })
+                            .catch((error) => {
+                                if (error.response) {
+                                    if(error.response.status === 401){
+                                        parent.setState({
+                                            zipError: "Zip must be numbers.",
+                                            proccessingPayment: false
+                                        })
+                                    }
+                                }
+                            })
+
                         }
                     }
                 })
@@ -717,7 +729,7 @@ class CheckoutForm extends React.Component {
                         <div className="form-row">
                             <div className="form-group col-md-2">
                                 <label htmlFor="inputZip">Zip</label>
-                                <input type="integer"
+                                <input type="integer" step="1" pattern="\d+" min="2"
                                     className="form-control" 
                                     id="inputZip" 
                                     value={ this.state.zipCode } 
@@ -873,7 +885,7 @@ class CheckoutForm extends React.Component {
                         <div className="form-row">
                             <div className="form-group col-md-2">
                                 <label htmlFor="inputZip">Zip</label>
-                                <input type="integer"
+                                <input type="integer" step="1" pattern="\d+" min="2"
                                     className="form-control" 
                                     id="inputZip" 
                                     value={ this.state.zipCode } 
@@ -942,7 +954,7 @@ class CheckoutForm extends React.Component {
                         <ButtonOrder type="submit" disabled={ this.state.proccessingPayment }>
                                 { this.state.proccessingPayment ? <ButtonSpinner /> : "Pay" }
                         </ButtonOrder>
-                        <span style={{color:'red'}}>{ this.state.stripeError }</span>
+                        <span style={{color:'red'}}>{ this.state.stripeError } {this.state.zipError}</span>
                     </form>
                 </div>
                 <div className="col-md-4">
