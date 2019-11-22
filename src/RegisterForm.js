@@ -188,7 +188,7 @@ class RegisterForm extends React.Component {
                 <div className="form-row">
                     <div className="form-group col-md-6">
 				        <label htmlFor="inputZip">Postcode </label>
-				        <input type="integer" 
+				        <input type="integer" step="1" pattern="\d+" min="2"
                             placeholder="Postcode" 
                             id="inputZip"
                             className="form-control"
