@@ -17,10 +17,8 @@ class NavigationBar extends React.Component {
         this.state = {
             amount: '',
             isLoggedin: 0,
-            liveApi: 'https://pa-back-herokuapp.com/',
-            localApi: 'http://localhost:8080/',
             apiUrl: 'http://localhost:8080/',
-            isLive: false
+            isLive: true
         }
         this.testL = this.testL.bind(this)
     }
@@ -52,7 +50,6 @@ class NavigationBar extends React.Component {
     logout(){
         let parent = this;
         document.cookie = "check = 0"
-        //axios.get("http://localhost:8080/logout", ({withCredentials: true}))
         axios.get(this.state.apiUrl + 'logout', ({withCredentials: true}))
         .then((response) => {
             //console.log(response)
@@ -75,24 +72,14 @@ class NavigationBar extends React.Component {
 
     // Checks if a user is loggedin on when the component was mounted
     componentDidMount() {
-        /*if(this.state.isLive){
-            this.setState({
-                apiUrl: 'https://pa-vips-back.herokuapp.com/'
-            })
-        }*/
-        //console.log('navbar apiUrl: ', this.state.apiUrl)
         let parent = this;
-        //axios.get(this.state.localApi+'loggedin', ({withCredentials: true}))
         axios.get(this.state.apiUrl + 'loggedin', ({ withCredentials: true }))
         .then((response) => {
-            //console.log(parent.state.localApi)
             if(response.status === 200){
                 parent.setState({
                     isLoggedin: response.data
                 })
-                //console.log('isLoggedin: ', parent.state.isLoggedin)
             }
-            //console.log('response status: ', response.status)
         }) 
     }
 
@@ -100,7 +87,6 @@ class NavigationBar extends React.Component {
 
     render() {
         if(this.state.isLoggedin > 0) {
-            //console.log('is now logged in...')
             return (
                 <Router>
                     <div>
@@ -159,7 +145,6 @@ class NavigationBar extends React.Component {
                             <Route path="/ordersuccess">
                                 <OrderSuccess
                                     apiUrl = { this.state.apiUrl }
-                                    //isLoggedin={this.state.isLoggedin}
                                 />
                             </Route>
                              <Route path="/loginsuccess">

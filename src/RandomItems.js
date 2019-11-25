@@ -5,8 +5,6 @@ class RandomItems extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            local: "http://localhost:8080/randomproducts",
-            live: "http://pa-vips-back.herokuapp.com/randomproducts",
             products: [],
             finalProd: [],
             amount: 0,
@@ -23,13 +21,9 @@ class RandomItems extends React.Component {
     }
     
     componentDidMount() {
-        //console.log(this.state.live)
-        //axios.get(this.state.local)
         axios.get(this.props.apiUrl + 'randomproducts')
         .then(response => response.data)
         .then((data) => {
-            //console.log(data)
-            //What is even going on in here?
             data.forEach(element => {
                 this.setState({products:[...this.state.products, element]})
             });
@@ -45,30 +39,16 @@ class RandomItems extends React.Component {
                 this.state.clothes.push(this.state.products[i][0][1])
                 this.state.descriptions.push(this.state.products[i][0][2])
                 this.state.prices.push(this.state.products[i][0][4])
-
- 
             }
             
-        
-            //console.log(this.state.finalProd)
-            //console.log(this.state.amount)
-            let pAmount = tempAmount
             this.setState({
                 amount: (tempAmount*100),
                 prettyAmount: tempAmount,
                 productIds: this.state.productIds
             })
         
-            //console.log("amount after setState: ", this.state.amount)
             this.props.onAmountChanged(this.state.amount, this.state.prettyAmount, this.state.productIds)
-            //console.log("------")
-            //console.log(this.state.clothes[0])
-            //console.log(this.state.descriptions[0])
-            //console.log(this.state.prices[0])
-
         })
-        
-         
     }
 
     render() {
