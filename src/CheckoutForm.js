@@ -47,6 +47,7 @@ class CheckoutForm extends React.Component {
             idempotency: uuidv4(),
             apiResponseCode: 0,
             stripeCustomerId: '',
+            receiptIntent: '',
             userId: 0,
             proccessingPayment: false,
             rdyToMove: false
@@ -112,10 +113,15 @@ class CheckoutForm extends React.Component {
                     body: JSON.stringify({ amount, idempotencyThing })
                 })
                 .then(function (response) {
+                    console.log(response)
                     return response.json();
                 })
                 .then(function (responseJson){
                     let clientSecret = responseJson.client_secret;
+                    parent.setState({
+                        receiptIntent: responseJson.id
+                    })
+                    console.log('respJ: ',responseJson)
                     return parent.props.stripe.handleCardPayment(clientSecret,{
                         payment_method_data: {
                             billing_details: {
@@ -134,7 +140,7 @@ class CheckoutForm extends React.Component {
                     }) // The return..
                 })
                 .then(function (result) {
-
+                    console.log()
                     parent.setState({
                         generatedPasswd: parent.generatePassword()
                     })
@@ -147,6 +153,10 @@ class CheckoutForm extends React.Component {
                     } else {
                         if(result.paymentIntent.status === 'succeeded')
                         {
+                            console.log('where is the receipt?: ',result) // inte här
+                            // set the receipt now.
+                            //parent.props.onReceipt('kvitto url här')
+
                             // now create a new user and then place the order and show the order successfull page..
                             let userData = {
 	                            "name": parent.state.name,
@@ -161,6 +171,7 @@ class CheckoutForm extends React.Component {
                             axios.post(parent.props.apiUrl + 'register/user', userData)
                             .then((regResponse) => {
                                 if(regResponse.status === 201){
+                                    parent.props.onAnonCheckout(parent.state.email, parent.state.generatedPasswd) // <------- -HERE IS NEW SHIT
                                 } else {
                                     //console.log('Something went horribly wrong.. :\'( ')
                                 }
@@ -168,22 +179,35 @@ class CheckoutForm extends React.Component {
                             })
                             .then((regResponse) => {
                                 if(regResponse.status === 201){
-
-                                    let orderData = {
-                                        customer_id: regResponse.data,
-                                        product_id: parent.state.productIds,
-                                        status: 'payment comfirmed'
+                                    
+                                    //get teh receipt
+                                    let receipt = {
+                                        intent: parent.state.receiptIntent
                                     }
-                                    axios.post(parent.props.apiUrl + 'order', orderData, ({ withCredentials: true })) 
-                                    .then((orderResponse) => {
-                                        if(orderResponse.status === 201){
+                                    axios.post(parent.props.apiUrl + 'stripe/receipt', receipt)
+                                    .then((receiptResponse) => {
+                                        if(receiptResponse.status === 200){
+                                            parent.props.onReceipt(receiptResponse.data.url)
 
-                                            parent.setState({
-                                                rdyToMove: true
+                                            let orderData = {
+                                            customer_id: regResponse.data,
+                                            product_id: parent.state.productIds,
+                                            status: 'payment comfirmed'
+                                            }
+                                            axios.post(parent.props.apiUrl + 'order', orderData, ({ withCredentials: true })) 
+                                            .then((orderResponse) => {
+                                                if(orderResponse.status === 201){
+
+                                                    parent.setState({
+                                                        rdyToMove: true
+                                                    })
+                                                }
                                             })
+         
                                         }
                                     })
 
+                                   
                                 } else {
                                     console.log('Something went horribly wrong.. :\'( ')
                                 }

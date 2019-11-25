@@ -17,6 +17,9 @@ class NavigationBar extends React.Component {
         this.state = {
             amount: '',
             isLoggedin: 0,
+            newUserEmail: '',
+            generatedPasswd: '',
+            receiptUrl: '',
             apiUrl: 'http://localhost:8080/',
             isLive: true
         }
@@ -33,6 +36,19 @@ class NavigationBar extends React.Component {
         console.log(document.cookie)
         console.log(document.readCookie)
 
+    }
+
+    newUsrCredentials(email, passwd) {
+        this.setState({
+            newUserEmail: email,
+            generatedPasswd: passwd
+        })
+    }
+
+    changeReceiept(url){
+        this.setState({
+            receiptUrl: url
+        })
     }
 
     changeLogin(isLoggedin){
@@ -79,6 +95,7 @@ class NavigationBar extends React.Component {
                 parent.setState({
                     isLoggedin: response.data
                 })
+                console.log(this.state.isLoggedin)
             }
         }) 
     }
@@ -87,6 +104,7 @@ class NavigationBar extends React.Component {
 
     render() {
         if(this.state.isLoggedin > 0) {
+            console.log('isloggedin: ', this.state.isLoggedin)
             return (
                 <Router>
                     <div>
@@ -131,23 +149,26 @@ class NavigationBar extends React.Component {
                                         <CheckoutForm 
                                             isLoggedin = { this.state.isLoggedin }
                                             apiUrl = { this.state.apiUrl }
+                                            onReceipt = {(url) => this.changeReceiept(url)}
                                         /> 
                                     </Elements>
                                  </StripeProvider>
                             </Route>
-                            <Route path="/login">
+                            <Route path="/ordersuccess">
+                                <OrderSuccess
+                                    apiUrl = { this.state.apiUrl }
+                                    isLoggedin = { this.state.isLoggedin }
+                                    receiptUrl = { this.state.receiptUrl}
+                                />
+                            </Route>
+                             <Route path="/login">
                                 <LoginForm 
                                     onLoggedInChange={ (isLoggedin) => this.changeLogin(isLoggedin) }
                                     apiUrl = { this.state.apiUrl }
                                     isLoggedin={this.state.isLoggedin}
                                 />
                             </Route>
-                            <Route path="/ordersuccess">
-                                <OrderSuccess
-                                    apiUrl = { this.state.apiUrl }
-                                />
-                            </Route>
-                             <Route path="/loginsuccess">
+                            <Route path="/loginsuccess">
                                 <LoginSuccess
                                     apiUrl = { this.state.apiUrl }
                                     isLoggedin={this.state.isLoggedin}
@@ -216,6 +237,8 @@ class NavigationBar extends React.Component {
                                         <CheckoutForm 
                                             isLoggedin = { this.state.isLoggedin }
                                             apiUrl = { this.state.apiUrl }
+                                            onAnonCheckout = {(email, passwd) => this.newUsrCredentials(email, passwd)}
+                                            onReceipt = {(url) => this.changeReceiept(url)}
                                         /> 
                                     </Elements>
                                  </StripeProvider>
@@ -230,7 +253,10 @@ class NavigationBar extends React.Component {
                             <Route path="/ordersuccess" component={OrderSuccess}>
                                 <OrderSuccess
                                     apiUrl = { this.state.apiUrl }
-                                    isLoggedin={this.state.isLoggedin}
+                                    isLoggedin={ this.state.isLoggedin }
+                                    newUserEmail = { this.state.newUserEmail }
+                                    generatedPasswd = { this.state.generatedPasswd }
+                                    receiptUrl = { this.state.receiptUrl}
                                 />
                             </Route>
                             
