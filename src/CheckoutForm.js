@@ -136,7 +136,7 @@ class CheckoutForm extends React.Component {
                                     state: parent.state.statename
                                 }
                             }
-                        }
+                        } //can we do receipt email stuff here
                     }) // The return..
                 })
                 .then(function (result) {
@@ -256,6 +256,9 @@ class CheckoutForm extends React.Component {
                 })
                 .then(function (responseJson){
                     let clientSecret = responseJson.client_secret;
+                    parent.setState({
+                        receiptIntent: responseJson.id
+                    })
                     return parent.props.stripe.handleCardPayment(clientSecret,{
                         payment_method_data: {
                             billing_details: {
@@ -286,24 +289,33 @@ class CheckoutForm extends React.Component {
                         {
                             // webhook will save the customer.
                             // now create a new user and then place the order and show the order successfull page..
-
-                            let orderData = {
-                                    customer_id: parent.state.userId, 
-                                    product_id: parent.state.productIds,
-                                    status: 'payment comfirmed'
-                                }
+                            let receipt = {
+                                intent: parent.state.receiptIntent
+                            }
+                            axios.post(parent.props.apiUrl + 'stripe/receipt', receipt)
+                            .then((receiptResponse) => {
+                                if(receiptResponse.status === 200){
+                                    parent.props.onReceipt(receiptResponse.data.url)
+                                    let orderData = {
+                                        customer_id: parent.state.userId, 
+                                        product_id: parent.state.productIds,
+                                        status: 'payment comfirmed'
+                                        }
                             
-                            axios.post(parent.props.apiUrl + 'order', orderData)
-                            .then((response) => {
-                                if(response.status === 201){
-                                    parent.setState({
-                                        rdyToMove: true
-                                    })
-                                } else {
-                                    //console.log('something whent wrong while placing order in db')
+                                        axios.post(parent.props.apiUrl + 'order', orderData)
+                                        .then((response) => {
+                                            if(response.status === 201){
+                                                parent.setState({
+                                                    rdyToMove: true
+                                                })
+                                            } else {
+                                                //console.log('something whent wrong while placing order in db')
+                                            }
+                                        })
                                 }
                             })
-                        }
+
+                                                   }
                     }
                 })
                 } catch (error) {
@@ -333,25 +345,38 @@ class CheckoutForm extends React.Component {
                     return response.json();
                 })
                 .then(function (responseJson){
+                    
                     if(responseJson.status === 'succeeded'){
-                        let orderData = {
-                            customer_id: parent.state.userId, 
-                            product_id: parent.state.productIds,
-                            status: 'payment comfirmed'
-                            }
+                        parent.setState({
+                            receiptIntent: responseJson.id
+                        })
+                        let receipt = {
+                            intent: parent.state.receiptIntent
+                        }
+                        axios.post(parent.props.apiUrl + 'stripe/receipt', receipt)
+                        .then((receiptResponse) => {
+                            if(receiptResponse.status === 200){
+                                console.log('kvitto: ', receiptResponse.data.url)
+                                parent.props.onReceipt(receiptResponse.data.url)
+                                let orderData = {
+                                    customer_id: parent.state.userId, 
+                                    product_id: parent.state.productIds,
+                                    status: 'payment comfirmed'
+                                }
                        
-                        axios.post(parent.props.apiUrl + 'order', orderData)
-                        .then((response) => {
+                                axios.post(parent.props.apiUrl + 'order', orderData)
+                                .then((response) => {
                                 
-                            if(response.status === 201){
-                                parent.setState({
-                                    rdyToMove: true
+                                    if(response.status === 201){
+                                        parent.setState({
+                                            rdyToMove: true
+                                        })
+                                    } else {
+                                        //console.log('something whent wrong while placing order in db')
+                                    }
                                 })
-                            } else {
-                                //console.log('something whent wrong while placing order in db')
                             }
                         })
-
                     }
                 })
         } catch (error) {
