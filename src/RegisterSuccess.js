@@ -10,7 +10,7 @@ class RegisterSuccess extends React.Component{
             <div className="container-fluid center">
                 <div className="card pa-card mt-3 border rounded shadow-lg">
                     <div className="card-body">
-                        <h5 className="card-title">Registration successfull.</h5>
+                        <h5 className="card-title">Registration successful.</h5>
                         <p className="card-text">
                             Thank you for registring an account, you can now log in and keep using the site.
                             If you want to save your credit card details you can choose to do so at checkout.

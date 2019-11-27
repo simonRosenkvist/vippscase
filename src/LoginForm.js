@@ -92,8 +92,8 @@ onSubmitUser = (event) => {
 				    <main className="container-fluid center">
 					<form className="form-group mt-3 p-3 border rounded shadow-lg" 
 							onSubmit={this.onSubmitUser}>
-							<label >Email</label>
-					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="Email" required></input>
+							<label >E-mail</label>
+					        <input type="email" className="form-control" id="loginEmail" onChange={this.onChangeEmail} placeholder="E-mail" required></input>
 
 						    <br />
 
@@ -102,7 +102,7 @@ onSubmitUser = (event) => {
 
 					        <br />
 
-							<button className="btn btn-primary">Log in</button><center>{this.state.loginError}</center>
+							<button className="btn btn-primary pa-btn">Log in</button><center>{this.state.loginError}</center>
 							
 
 				        </form>

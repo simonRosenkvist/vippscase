@@ -108,8 +108,8 @@ class NavigationBar extends React.Component {
             return (
                 <Router>
                     <div>
-                        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                            <span className="navbar-brand">VipsCase</span>
+                        <nav className="navbar navbar-expand-lg navbar-light pa-nav-bg">
+                            <span className="navbar-brand pa-nav-text">VipsCase</span>
                             <button className="navbar-toggler collapsed"
                                     type="button" 
                                     data-toggle="collapse" 
@@ -122,16 +122,16 @@ class NavigationBar extends React.Component {
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul className="navbar-nav mr-auto">
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/">Home</Link>
+                                        <Link className="nav-link pa-nav-text" to="/">Home</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/checkout">Purchase</Link>
+                                        <Link className="nav-link pa-nav-text" to="/checkout">Purchase</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/history">Order history</Link>
+                                        <Link className="nav-link pa-nav-text" to="/history">Order history</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/login" onClick={(e)=>{this.logout()}}>Logout</Link>
+                                        <Link className="nav-link pa-nav-text" to="/login" onClick={(e)=>{this.logout()}}>Logout</Link>
                                     </li>
                                 </ul>
                             </div>
@@ -186,8 +186,8 @@ class NavigationBar extends React.Component {
             return (
                 <Router>
                     <div>
-                        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                            <span className="navbar-brand">VipsCase</span>
+                        <nav className="navbar navbar-expand-lg navbar-light pa-nav-bg">
+                            <span className="navbar-brand pa-nav-text">VipsCase</span>
                             <button className="navbar-toggler collapsed"
                                     type="button" 
                                     data-toggle="collapse" 
@@ -200,16 +200,16 @@ class NavigationBar extends React.Component {
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul className="navbar-nav mr-auto">
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/">Home</Link>
+                                        <Link className="nav-link pa-nav-text" to="/">Home</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/login">Login</Link>
+                                        <Link className="nav-link pa-nav-text" to="/login">Login</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/register">Register</Link>
+                                        <Link className="nav-link pa-nav-text" to="/register">Register</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/checkout">Purchase without login</Link>
+                                        <Link className="nav-link pa-nav-text" to="/checkout">Purchase without login</Link>
                                     </li>
                                 </ul>
                             </div>
