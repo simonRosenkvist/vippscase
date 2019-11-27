@@ -11,7 +11,7 @@ import RandomItems from './RandomItems'
 
 const uuidv4 = require('uuid/v4');
 const ButtonOrder = ({ children, ...rest}) => {
-    return <button className="btn btn-primary"{...rest}>{children}</button>
+    return <button className="btn btn-primary pa-btn"{...rest}>{children}</button>
 }
 
 const ButtonSpinner = () =>(
@@ -192,7 +192,7 @@ class CheckoutForm extends React.Component {
                                             let orderData = {
                                             customer_id: regResponse.data,
                                             product_id: parent.state.productIds,
-                                            status: 'payment comfirmed'
+                                            status: 'payment confirmed'
                                             }
                                             axios.post(parent.props.apiUrl + 'order', orderData, ({ withCredentials: true })) 
                                             .then((orderResponse) => {
@@ -299,7 +299,7 @@ class CheckoutForm extends React.Component {
                                     let orderData = {
                                         customer_id: parent.state.userId, 
                                         product_id: parent.state.productIds,
-                                        status: 'payment comfirmed'
+                                        status: 'payment confirmed'
                                         }
                             
                                         axios.post(parent.props.apiUrl + 'order', orderData)
@@ -361,7 +361,7 @@ class CheckoutForm extends React.Component {
                                 let orderData = {
                                     customer_id: parent.state.userId, 
                                     product_id: parent.state.productIds,
-                                    status: 'payment comfirmed'
+                                    status: 'payment confirmed'
                                 }
                        
                                 axios.post(parent.props.apiUrl + 'order', orderData)
@@ -407,11 +407,11 @@ class CheckoutForm extends React.Component {
                                 <form className="form-group mt-3 p-3 border rounded shadow-lg pa-form"
                                     onSubmit={ this.handleSavedCardPayment  }
                                 >
-                                    <h6 className="class-text">You will be charged: { this.state.prettyAmount } sek</h6>
-                                    <ButtonOrder type="submit" disabled={ this.state.proccessingPayment }>
-                                        { this.state.proccessingPayment ? <ButtonSpinner /> : "Pay" }
+                                    <h6 className="class-text">Total amount: { this.state.prettyAmount } sek</h6>
+                                    <ButtonOrder className="btn btn-primary pa-btn" type="submit" disabled={ this.state.proccessingPayment }>
+                                        { this.state.proccessingPayment ? <ButtonSpinner /> : "Purchase" }
                                     </ButtonOrder>
-                                    <span style={{color:'red'}}>{ this.state.stripeError }</span>
+                                    <div><span style={{color:'red'}}>{ this.state.stripeError }</span></div>
                                 </form>
                             </div>
 
@@ -446,11 +446,11 @@ class CheckoutForm extends React.Component {
                                                 />
                                         </div>
                                         <div className="form-group col-md-6">
-                                            <label htmlFor="inputEmail">Email</label>
+                                            <label htmlFor="inputEmail">E-mail</label>
                                             <input type="email"
                                                 className="form-control" 
                                                 id="inputEmail" 
-                                                placeholder="Email" 
+                                                placeholder="E-mail" 
                                                 value={ this.state.email } 
                                                 onChange={ (e) => this.setState({ email: e.target.value }) } 
                                                 required
@@ -564,11 +564,11 @@ class CheckoutForm extends React.Component {
                                             </label>
                                         </div>
                                     </div>
-                                    <h6 className="class-text">You will be charged: { this.state.prettyAmount } sek</h6>
-                                    <ButtonOrder type="submit" disabled={ this.state.proccessingPayment }>
-                                        { this.state.proccessingPayment ? <ButtonSpinner /> : "Pay" }
+                                    <h6 className="class-text">Total amount: { this.state.prettyAmount } sek</h6>
+                                    <ButtonOrder className="btn btn-primary pa-btn" type="submit" disabled={ this.state.proccessingPayment }>
+                                        { this.state.proccessingPayment ? <ButtonSpinner /> : "Purchase" }
                                     </ButtonOrder>
-                                    <span style={{color:'red'}}>{ this.state.stripeError }</span>
+                                    <div><span style={{color:'red'}}>{ this.state.stripeError }</span></div>
                                 </form>
                             </div>
                             <div className="col-md-4">
@@ -603,11 +603,11 @@ class CheckoutForm extends React.Component {
                                     />
                                 </div>
                                 <div className="form-group col-md-6">
-                                    <label htmlFor="inputEmail">Email</label>
+                                    <label htmlFor="inputEmail">E-mail</label>
                                     <input type="email"
                                         className="form-control" 
                                         id="inputEmail" 
-                                        placeholder="Email" 
+                                        placeholder="E-mail" 
                                         value={ this.state.email } 
                                         onChange={ (e) => this.setState({ email: e.target.value }) } 
                                         required
@@ -708,11 +708,13 @@ class CheckoutForm extends React.Component {
                                 </div>
                             </div>
            
-                            <h6 className="class-text">You will be charged: { this.state.prettyAmount } sek</h6>
-                            <ButtonOrder type="submit" disabled={ this.state.proccessingPayment }>
-                                { this.state.proccessingPayment ? <ButtonSpinner /> : "Pay" }
+                            <h6 className="class-text">Total amount: { this.state.prettyAmount } sek</h6>
+                            <ButtonOrder className="btn btn-primary pa-btn" type="submit" disabled={ this.state.proccessingPayment }>
+                                { this.state.proccessingPayment ? <ButtonSpinner /> : "Purchase" }
                             </ButtonOrder>
+                            <div>
                             <span style={{color:'red'}}>{ this.state.stripeError } {this.state.zipError}</span>
+                            </div>
                         </form>
                     </div>
                     <div className="col-md-4">
