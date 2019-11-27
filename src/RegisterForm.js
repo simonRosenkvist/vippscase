@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 
 const ButtonOrder = ({ children, ...rest}) => {
-    return <button className="btn btn-primary"{...rest}>{children}</button>
+    return <button className="btn btn-primary pa-btn"{...rest}>{children}</button>
 }
 
 const ButtonSpinner = () =>(
@@ -116,9 +116,9 @@ class RegisterForm extends React.Component {
 			onSubmit={this.onSubmitForm }>
                 <div className="form-row">
                     <div className="form-group col-md-6">
-				        <label htmlFor="inputName">Firstname </label>
+				        <label htmlFor="inputName">First name </label>
 				        <input type="text"
-                            placeholder="Firstname"
+                            placeholder="First name"
                             id="input"
                             className="form-control"
                             onChange={this.onChangeName} 
@@ -126,9 +126,9 @@ class RegisterForm extends React.Component {
                         />
                     </div>
                     <div className="form-group col-md-6">
-				        <label htmlFor="inputLastname">Lastname </label>
+				        <label htmlFor="inputLastname">Last name </label>
 				        <input type="text" 
-                            placeholder="Lastname" 
+                            placeholder="Last name" 
                             id="inputLastname"
                             className="form-control"
                             onChange={this.onChangeLastName} 
@@ -138,9 +138,9 @@ class RegisterForm extends React.Component {
                 </div>
                 <div className="form-row">
                     <div className="form-group col-md-6">
-                     <label htmlFor="inputMail">Email </label>
+                     <label htmlFor="inputMail">E-mail </label>
 				        <input type="email" 
-                            placeholder="Email" 
+                            placeholder="E-mail" 
                             id="inputMail"
                             className="form-control"
                             onChange={this.onChangeEmail} 
@@ -203,7 +203,7 @@ class RegisterForm extends React.Component {
                         />
                     </div>
                 </div>
-               <ButtonOrder type="submit" disabled={ this.state.doRegister }>
+               <ButtonOrder className="btn btn-primary pa-btn" type="submit" disabled={ this.state.doRegister }>
                             { this.state.doRegister ? <ButtonSpinner /> : "Register" }
                 </ButtonOrder>
 			</form>
