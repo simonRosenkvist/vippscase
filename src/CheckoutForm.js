@@ -55,6 +55,7 @@ class CheckoutForm extends React.Component {
         }
     }
     
+    // check if the user is has a stripe customer id in our db when the page mounts if true only a pay button will be renderd
     componentDidMount() {
         let parent = this;
         axios.get(this.props.apiUrl + 'stripe/customer', ({ withCredentials: true }))
@@ -94,9 +95,12 @@ class CheckoutForm extends React.Component {
         return passwd
     }
 
-    // Customer that's not loggeding purchase
+    // Handle payments for new customers who doesnt have an account
+    // will call our api to create a payment intent and then use the returned client secret 
+    // and paymentmethod from the form to call stripes api to perform the charge.
     handleNewCustomerPayment = async (e) => {
         e.preventDefault();
+        // the pinner's state
         this.setState({
             proccessingPayment: true
         })
@@ -104,7 +108,7 @@ class CheckoutForm extends React.Component {
                 const parent = this;
                 let amount = this.state.amount;
                 let idempotencyThing = this.state.idempotency;
-                //await fetch(this.state.stripeLocal, {
+                // fetch a paymentIntent from our backend
                 await fetch(this.props.apiUrl + 'stripe/intent', {
                     method: 'POST',
                     headers: {
@@ -117,11 +121,12 @@ class CheckoutForm extends React.Component {
                     return response.json();
                 })
                 .then(function (responseJson){
+                    // get the client secret that stipe requires from the response requires from the response
                     let clientSecret = responseJson.client_secret;
                     parent.setState({
                         receiptIntent: responseJson.id
                     })
-                    console.log('respJ: ',responseJson)
+                    // tell stripe that we are ready to charge the card by sending the client secret and the payment method
                     return parent.props.stripe.handleCardPayment(clientSecret,{
                         payment_method_data: {
                             billing_details: {
@@ -136,16 +141,15 @@ class CheckoutForm extends React.Component {
                                     state: parent.state.statename
                                 }
                             }
-                        } //can we do receipt email stuff here
-                    }) // The return..
+                        }
+                    })
                 })
                 .then(function (result) {
-                    console.log()
                     parent.setState({
                         generatedPasswd: parent.generatePassword()
                     })
                     if(result.error){
-                        //console.log('fail with: ', result.error.message) // catches the first vailid error message.. ex email then country code and at last any card errors like processing error and funds errors
+                        // show the stripe error message
                         parent.setState({
                             stripeError: result.error.message,
                             proccessingPayment: false
@@ -153,11 +157,8 @@ class CheckoutForm extends React.Component {
                     } else {
                         if(result.paymentIntent.status === 'succeeded')
                         {
-                            console.log('where is the receipt?: ',result) // inte här
-                            // set the receipt now.
-                            //parent.props.onReceipt('kvitto url här')
-
-                            // now create a new user and then place the order and show the order successfull page..
+                            // if stripe payment successful then create a new user and place the order in or db
+                            // and show the order successfull page..
                             let userData = {
 	                            "name": parent.state.name,
 	                            "email": parent.state.email,
@@ -171,16 +172,14 @@ class CheckoutForm extends React.Component {
                             axios.post(parent.props.apiUrl + 'register/user', userData)
                             .then((regResponse) => {
                                 if(regResponse.status === 201){
-                                    parent.props.onAnonCheckout(parent.state.email, parent.state.generatedPasswd) // <------- -HERE IS NEW SHIT
+                                    parent.props.onAnonCheckout(parent.state.email, parent.state.generatedPasswd) 
                                 } else {
-                                    //console.log('Something went horribly wrong.. :\'( ')
                                 }
                                 return regResponse
                             })
                             .then((regResponse) => {
                                 if(regResponse.status === 201){
-                                    
-                                    //get teh receipt
+                                    // get the receipt by calling our api with the used payment intent 
                                     let receipt = {
                                         intent: parent.state.receiptIntent
                                     }
@@ -232,9 +231,12 @@ class CheckoutForm extends React.Component {
         
     }
 
-    // Customer thats loggedin but has not saved a card
+    // Handle logged in users payment with no card
+    // if the user chooses to save a card our api's webhook will pick up the 
+    // save_card: true parameter in the transaction metadata that stripe sends as an event.
     handleLoggedInCustomerPayment = async (e) => {
         e.preventDefault();
+        // set the spinners state
         this.setState({
             proccessingPayment: true
         })  
@@ -244,6 +246,7 @@ class CheckoutForm extends React.Component {
                 let idempotencyThing = this.state.idempotency;
                 let saveCard = this.state.saveMe;
                 let userId = this.state.userId.toString();
+                // tell our api to create a stripe payment intent
                 await fetch(this.props.apiUrl + 'stripe/intent', {
                     method: 'POST',
                     headers: {
@@ -255,10 +258,12 @@ class CheckoutForm extends React.Component {
                     return response.json();
                 })
                 .then(function (responseJson){
+                    // extract the client secret that stripe needs to verify the payment intent
                     let clientSecret = responseJson.client_secret;
                     parent.setState({
                         receiptIntent: responseJson.id
                     })
+                    // tell stripe to charge the card by sending the client secret from the generated paymentIntent and the payment method
                     return parent.props.stripe.handleCardPayment(clientSecret,{
                         payment_method_data: {
                             billing_details: {
@@ -279,7 +284,7 @@ class CheckoutForm extends React.Component {
                 })
                 .then(function (result) {
                     if(result.error){
-                        console.log('fail with: ', result.error.message) // catches the first vailid error message.. ex email then country code and at last any card errors like processing error and funds errors
+                        // if there's a error present it to the user
                         parent.setState({
                             stripeError: result.error.message,
                             proccessingPayment: false
@@ -287,8 +292,8 @@ class CheckoutForm extends React.Component {
                     } else {
                         if(result.paymentIntent.status === 'succeeded')
                         {
-                            // webhook will save the customer.
-                            // now create a new user and then place the order and show the order successfull page..
+                            //  tell our api to fetch the receipt for the transaction by using the paymentintent id used
+                            //  then place the order in our database
                             let receipt = {
                                 intent: parent.state.receiptIntent
                             }
@@ -301,7 +306,6 @@ class CheckoutForm extends React.Component {
                                         product_id: parent.state.productIds,
                                         status: 'payment confirmed'
                                         }
-                            
                                         axios.post(parent.props.apiUrl + 'order', orderData)
                                         .then((response) => {
                                             if(response.status === 201){
@@ -309,7 +313,6 @@ class CheckoutForm extends React.Component {
                                                     rdyToMove: true
                                                 })
                                             } else {
-                                                //console.log('something whent wrong while placing order in db')
                                             }
                                         })
                                 }
@@ -334,6 +337,7 @@ class CheckoutForm extends React.Component {
                 let amount = this.state.amount;
                 let idempotencyThing = this.state.idempotency;
                 let stripeCustomer = this.state.stripeCustomerId;
+                // tell our api to create a paymentIntent using the saved stripe customer id from our db
                 await fetch(this.props.apiUrl + 'stripe/savedcustomer', {
                     method: 'POST',
                     headers: {
@@ -350,14 +354,16 @@ class CheckoutForm extends React.Component {
                         parent.setState({
                             receiptIntent: responseJson.id
                         })
+                        // tell our api to get the receipt by providing the paymentid
                         let receipt = {
                             intent: parent.state.receiptIntent
                         }
                         axios.post(parent.props.apiUrl + 'stripe/receipt', receipt)
                         .then((receiptResponse) => {
                             if(receiptResponse.status === 200){
-                                console.log('kvitto: ', receiptResponse.data.url)
                                 parent.props.onReceipt(receiptResponse.data.url)
+
+                                // now place the order in our db
                                 let orderData = {
                                     customer_id: parent.state.userId, 
                                     product_id: parent.state.productIds,
@@ -386,7 +392,7 @@ class CheckoutForm extends React.Component {
     
    
     render() {
-
+        // redirect tp successpage
         if(this.state.rdyToMove){
                 return <Redirect to={{ 
                                 pathname: '/ordersuccess',
