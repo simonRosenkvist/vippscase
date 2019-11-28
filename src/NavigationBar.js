@@ -109,7 +109,7 @@ class NavigationBar extends React.Component {
                 <Router>
                     <div>
                         <nav className="navbar navbar-expand-lg navbar-light pa-nav-bg">
-                            <span className="navbar-brand pa-nav-text">VipsCase</span>
+                            <span className="navbar-brand pa-nav-text">VippsCase</span>
                             <button className="navbar-toggler collapsed"
                                     type="button" 
                                     data-toggle="collapse" 
@@ -187,7 +187,7 @@ class NavigationBar extends React.Component {
                 <Router>
                     <div>
                         <nav className="navbar navbar-expand-lg navbar-light pa-nav-bg">
-                            <span className="navbar-brand pa-nav-text">VipsCase</span>
+                            <span className="navbar-brand pa-nav-text">VippsCase</span>
                             <button className="navbar-toggler collapsed"
                                     type="button" 
                                     data-toggle="collapse" 
