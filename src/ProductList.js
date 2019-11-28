@@ -15,7 +15,7 @@ class ProductList extends React.Component {
             status: [],
             finalOrder: [], //Ska hålla en array (som innehåller en eller flera ordrar) per orderId
             dataToDisplay: [],
-            orderIds: [], // p-a för test
+            orderIds: [], 
             paHTML: []
             
 
